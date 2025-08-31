@@ -1,7 +1,6 @@
 import express from 'express';
-import { AIService, Rule } from '../services/aiService';
+import { getModelscopeService, Rule } from '../services/modelscopeService';
 import { StorageService } from '../services/storageService';
-import { getModelscopeService } from '../services/modelscopeService';
 
 const router = express.Router();
 
@@ -23,7 +22,8 @@ router.post('/extract', async (req, res) => {
     }
 
     // 调用AI服务提取样式
-    const result = await AIService.extractStyles(content, styleTypes);
+    const modelscopeService = getModelscopeService();
+    const result = await modelscopeService.extractStyles(content, styleTypes);
 
     if (result.success && result.rules && result.rules.length > 0) {
       // 保存提取的规则到本地存储
@@ -76,7 +76,8 @@ router.post('/convert', async (req, res) => {
     }
 
     // 调用AI服务转换样式
-    const result = await AIService.convertStyles(content, rules, targetStyle);
+    const modelscopeService = getModelscopeService();
+    const result = await modelscopeService.convertStyles(content, rules, targetStyle);
 
     if (result.success) {
       // 保存转换历史
@@ -131,10 +132,20 @@ router.post('/rules', async (req, res) => {
   try {
     const { type, pattern, description, examples, name } = req.body;
 
-    if (!type || !pattern || !description) {
+    // 验证必填字段不能为空或空字符串
+    if (!type || !pattern || !description || 
+        type.trim() === '' || pattern.trim() === '' || description.trim() === '') {
       return res.status(400).json({
         success: false,
-        message: '请提供完整的规则信息（type, pattern, description）'
+        message: '请提供完整的规则信息（type, pattern, description不能为空）'
+      });
+    }
+
+    // 验证name字段（如果提供的话）
+    if (name && name.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        message: '规则名称不能为空字符串'
       });
     }
 
@@ -168,11 +179,12 @@ router.post('/rules', async (req, res) => {
         };
         
         const modelscopeService = getModelscopeService();
-        const mergedRule = await modelscopeService.mergeRules(tempNewRule, sameTypeRules);
+        const mergeResult = await modelscopeService.mergeRules(tempNewRule, sameTypeRules);
         
-        if (mergedRule) {
+        if (mergeResult && mergeResult.success) {
           // 使用第一个现有规则的ID，保持其创建时间
           const targetRule = sameTypeRules[0];
+          const mergedRule = mergeResult.data.mergedRule;
           finalRule = {
             ...mergedRule,
             id: targetRule.id,
@@ -186,13 +198,19 @@ router.post('/rules', async (req, res) => {
           }
           
           // 更新目标规则
-          await StorageService.updateRule(finalRule.id, {
+          console.log('准备更新规则，finalRule内容:', JSON.stringify(finalRule, null, 2));
+          console.log('mergedRule内容:', JSON.stringify(mergedRule, null, 2));
+          console.log('finalRule.type:', finalRule.type);
+          console.log('finalRule.name:', finalRule.name);
+          const updateData = {
             type: finalRule.type,
             name: finalRule.name,
             pattern: finalRule.pattern,
             description: finalRule.description,
             examples: finalRule.examples
-          });
+          };
+          console.log('更新数据:', JSON.stringify(updateData, null, 2));
+          await StorageService.updateRule(finalRule.id, updateData);
           
           mergePerformed = true;
           console.log(`智能合并完成，合并了 ${sameTypeRules.length} 个规则`);
@@ -439,8 +457,20 @@ router.delete('/history', async (req, res) => {
  */
 router.get('/test', async (req, res) => {
   try {
-    const result = await AIService.testConnection();
-    res.json(result);
+    const modelscopeService = getModelscopeService();
+    const result = await modelscopeService.testConnection();
+    
+    if (result.success) {
+      res.json({
+        success: true,
+        message: result.data?.message || '连接成功'
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: result.error || '连接失败'
+      });
+    }
   } catch (error) {
     console.error('测试API错误:', error);
     res.status(500).json({

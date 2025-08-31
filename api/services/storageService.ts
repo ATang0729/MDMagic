@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { Rule } from './aiService';
+import { Rule } from './modelscopeService';
 
 // 数据存储路径
 const DATA_DIR = path.join(process.cwd(), 'data');

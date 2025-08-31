@@ -3,14 +3,17 @@
     {
       "id": "rule_heading_1700000000",
       "type": "heading",
-      "name": "三级标题",
-      "description": "用于表示三级标题，使用三个井号加空格后跟标题文本",
-      "pattern": "### {title}",
+      "name": "heading规则",
+      "pattern": "#### {title}|^#{1,6}\\s+(.+)$",
+      "description": "添加四级标题",
       "examples": [
-        "### 3.3.3 CLIP知识蒸馏（CLIP Knowledge Distillation）"
+        "#### 测试",
+        "### 小标题",
+        "## 副标题",
+        "# 主标题"
       ],
       "createdAt": "2023-11-15T08:00:00Z",
-      "updatedAt": "2023-11-15T08:00:00Z"
+      "updatedAt": "2025-08-31T09:29:11.498Z"
     },
     {
       "id": "rule_1756630914188",
@@ -24,6 +27,108 @@
       ],
       "createdAt": "2025-08-31T09:01:54.188Z",
       "updatedAt": "2025-08-31T09:07:17.952Z"
+    },
+    {
+      "id": "rule_bold_2023-10-05T12:00:00Z",
+      "type": "bold",
+      "name": "粗体文本",
+      "description": "使用双星号包围的文本，表示加粗显示。",
+      "pattern": "\\*\\*.*\\*\\*",
+      "examples": [
+        "**粗体**"
+      ],
+      "createdAt": "2023-10-05T12:00:00Z",
+      "updatedAt": "2023-10-05T12:00:00Z"
+    },
+    {
+      "id": "rule_list_item_2023-10-05T12:00:00Z",
+      "type": "list",
+      "name": "项目列表项",
+      "description": "以连字符开头并缩进的行，表示无序列表中的项目。",
+      "pattern": "- +.*",
+      "examples": [
+        "- 项目1",
+        "- 项目2"
+      ],
+      "createdAt": "2023-10-05T12:00:00Z",
+      "updatedAt": "2023-10-05T12:00:00Z"
+    },
+    {
+      "id": "rule_code_block_2023-10-05T12:00:00Z",
+      "type": "code",
+      "name": "代码块",
+      "description": "使用三重反引号包裹的代码段，支持语言标识。",
+      "pattern": "```[a-zA-Z]*\\n.*\\n```",
+      "examples": [
+        "```python\nprint(\"Hello World\")\n```"
+      ],
+      "createdAt": "2023-10-05T12:00:00Z",
+      "updatedAt": "2023-10-05T12:00:00Z"
+    },
+    {
+      "id": "rule_heading_1",
+      "type": "heading",
+      "name": "三级标题",
+      "description": "用于表示章节的三级标题，使用三个#号开头，后跟空格和标题文本。",
+      "pattern": "### {title}",
+      "examples": [
+        "### 3.3.3 CLIP知识蒸馏（CLIP Knowledge Distillation）"
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "rule_bold_2",
+      "type": "bold",
+      "name": "加粗文本",
+      "description": "用于强调关键术语或概念，使用双星号包围文本。",
+      "pattern": "**{text}**",
+      "examples": [
+        "**监督信号来源**",
+        "**蒸馏损失函数**"
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "rule_math_inline_3",
+      "type": "math_inline",
+      "name": "行内数学公式",
+      "description": "用于表示数学表达式中的变量或符号，使用美元符号包裹。",
+      "pattern": "$ {formula} $",
+      "examples": [
+        "$ V_j^{gt} $",
+        "$ \\mathcal{L}_{view\\_clip } $",
+        "$ \\text{CrossEntropy} $",
+        "$ \\left\\{\\text{CosSim}\\left(V_i', V_j^{gt}\\right) / \\tau\\right\\}_{j=1}^{J} $"
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "rule_math_block_4",
+      "type": "math_block",
+      "name": "块级数学公式",
+      "description": "用于展示独立的数学公式，使用双美元符号包裹，独占一行。",
+      "pattern": "$$\n{formula}\n$$",
+      "examples": [
+        "$$\n\\mathcal{L}_{view\\_clip }=\\frac{1}{I} \\sum_{i=1}^{I} \\text{CrossEntropy}\\left(\\left\\{\\text{CosSim}\\left(V_i', V_j^{gt}\\right) / \\tau\\right\\}_{j=1}^{J}, i\\right)\n$$"
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "rule_list_numbered_5",
+      "type": "list_numbered",
+      "name": "有序列表",
+      "description": "用于列出步骤或要点，使用数字加英文句点后跟空格开始每一项。",
+      "pattern": "{number}. {content}",
+      "examples": [
+        "1. **监督信号来源**：用真实新视角图像、BEV对应区域图像的CLIP特征作为“真值特征” $ V_j^{gt} $；",
+        "2. **蒸馏损失函数**：对g3D-LF预测的新视角表示 $ V' $、全景表示 $ V_i'' $、BEV表示 $ \\hat{R}' $ 计算对比损失，强制其与CLIP特征对齐（以新视角蒸馏为例）："
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
     }
   ]
 }

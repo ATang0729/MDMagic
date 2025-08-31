@@ -106,7 +106,7 @@ export class ModelscopeService {
     
     try {
       const prompt = this.buildExtractPrompt(content, styleTypes);
-      
+      // console.log('model:', this.model);
       const response = await this.client.chat.completions.create({
         model: this.model,
         messages: [
@@ -119,7 +119,7 @@ export class ModelscopeService {
             content: prompt
           }
         ],
-        max_tokens: 2000,
+        max_tokens: 20000,
         temperature: 0.3
       });
 
@@ -178,7 +178,7 @@ export class ModelscopeService {
             content: prompt
           }
         ],
-        max_tokens: 3000,
+        max_tokens: 30000,
         temperature: 0.2
       });
 
@@ -664,6 +664,9 @@ ${existingRulesText}
         .replace(/,\s*}/g, '}')
         .replace(/,\s*]/g, ']');
       
+      // 处理未终止的字符串问题
+      cleaned = this.fixUnterminatedStrings(cleaned);
+      
       // 确保字符串以{开头，以}结尾
       if (!cleaned.startsWith('{')) {
         const firstBrace = cleaned.indexOf('{');
@@ -682,6 +685,55 @@ ${existingRulesText}
       console.log('修复后的JSON前100字符:', cleaned.substring(0, 100));
       return cleaned;
     }
+  }
+
+  /**
+   * 修复未终止的字符串
+   */
+  private fixUnterminatedStrings(jsonStr: string): string {
+    let result = '';
+    let inString = false;
+    let escapeNext = false;
+    let lastQuoteIndex = -1;
+    
+    for (let i = 0; i < jsonStr.length; i++) {
+      const char = jsonStr[i];
+      
+      if (escapeNext) {
+        result += char;
+        escapeNext = false;
+        continue;
+      }
+      
+      if (char === '\\') {
+        result += char;
+        escapeNext = true;
+        continue;
+      }
+      
+      if (char === '"') {
+        if (inString) {
+          // 结束字符串
+          inString = false;
+          result += char;
+        } else {
+          // 开始字符串
+          inString = true;
+          lastQuoteIndex = i;
+          result += char;
+        }
+      } else {
+        result += char;
+      }
+    }
+    
+    // 如果字符串没有正确结束，添加结束引号
+    if (inString && lastQuoteIndex !== -1) {
+      console.log('检测到未终止的字符串，在位置', lastQuoteIndex, '添加结束引号');
+      result += '"';
+    }
+    
+    return result;
   }
 }
 

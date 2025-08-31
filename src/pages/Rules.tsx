@@ -310,8 +310,8 @@ const Rules: React.FC = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredRules.map((rule) => (
-              <div key={rule.id} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+            {filteredRules.map((rule, index) => (
+              <div key={rule.id || `rule-${index}`} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
                 <div className="flex items-center justify-between mb-3">
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
                     {rule.type}

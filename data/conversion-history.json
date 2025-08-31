@@ -1,6 +1,51 @@
 {
   "history": [
     {
+      "id": "conv_1756634624948",
+      "originalContent": "### 3.3.3 CLIP知识蒸馏（CLIP Knowledge Distillation）\n\n目标：弥补3D-语言数据（百万级）与2D图像-语言数据（十亿级）的规模差距，保证模型泛化性：\n\n1. **监督信号来源**：用真实新视角图像、BEV对应区域图像的CLIP特征作为“真值特征” \\( V_j^{gt} \\)；\n2. **蒸馏损失函数**：对g3D-LF预测的新视角表示 \\( V' \\)、全景表示 \\( V_i'' \\)、BEV表示 \\( \\hat{R}' \\) 计算对比损失，强制其与CLIP特征对齐（以新视角蒸馏为例）：\n\n\\[\n\n\\mathcal{L}_{view\\_clip }=\\frac{1}{I} \\sum_{i=1}^{I} \\text{CrossEntropy}\\left(\\left\\{\\text{CosSim}\\left(V_i', V_j^{gt}\\right) / \\tau\\right\\}_{j=1}^{J}, i\\right)\n\n\\]",
+      "convertedContent": "## 二级标题 (二级标题格式测试)\n\n目标：弥补3D-语言数据（百万级）与2D图像-语言数据（十亿级）的规模差距，保证模型泛化性：\n\n- **监督信号来源**：用真实新视角图像、BEV对应区域图像的CLIP特征作为“真值特征” $ V_j^{gt} $；\n- **蒸馏损失函数**：对g3D-LF预测的新视角表示 $ V' $、全景表示 $ V_i'' $、BEV表示 $ \\hat{R}' $ 计算对比损失，强制其与CLIP特征对齐（以新视角蒸馏为例）：\n\n$$\n\\mathcal{L}_{view\\_clip }=\\frac{1}{I} \\sum_{i=1}^{I} \\text{CrossEntropy}\\left(\\left\\{\\text{CosSim}\\left(V_i', V_j^{gt}\\right) / \\tau\\right\\}_{j=1}^{J}, i\\right)\n$$",
+      "appliedRuleIds": [
+        "rule_1756630914188",
+        "rule_list_item_2023-10-05T12:00:00Z",
+        "rule_code_block_2023-10-05T12:00:00Z",
+        "rule_bold_2",
+        "rule_math_inline_3",
+        "rule_math_block_4",
+        "rule_list_numbered_5"
+      ],
+      "createdAt": "2025-08-31T10:03:44.948Z"
+    },
+    {
+      "id": "conv_1756634467434",
+      "originalContent": "### 3.3.3 CLIP知识蒸馏（CLIP Knowledge Distillation）\n\n目标：弥补3D-语言数据（百万级）与2D图像-语言数据（十亿级）的规模差距，保证模型泛化性：\n\n1. **监督信号来源**：用真实新视角图像、BEV对应区域图像的CLIP特征作为“真值特征” $ V_j^{gt} $；\n2. **蒸馏损失函数**：对g3D-LF预测的新视角表示 $ V' $、全景表示 $ V_i'' $、BEV表示 $ \\hat{R}' $ 计算对比损失，强制其与CLIP特征对齐（以新视角蒸馏为例）：\n\n$$\n\n\\mathcal{L}_{view\\_clip }=\\frac{1}{I} \\sum_{i=1}^{I} \\text{CrossEntropy}\\left(\\left\\{\\text{CosSim}\\left(V_i', V_j^{gt}\\right) / \\tau\\right\\}_{j=1}^{J}, i\\right)\n\n$$",
+      "convertedContent": "## 二级标题 (二级标题格式测试)\n\n目标：弥补3D-语言数据（百万级）与2D图像-语言数据（十亿级）的规模差距，保证模型泛化性：\n\n- **监督信号来源**：用真实新视角图像、BEV对应区域图像的CLIP特征作为“真值特征” $ V_j^{gt} $；\n- **蒸馏损失函数**：对g3D-LF预测的新视角表示 $ V' $、全景表示 $ V_i'' $、BEV表示 $ \\hat{R}' $ 计算对比损失，强制其与CLIP特征对齐（以新视角蒸馏为例）：\n\n$$\n\\mathcal{L}_{view\\_clip }=\\frac{1}{I} \\sum_{i=1}^{I} \\text{CrossEntropy}\\left(\\left\\{\\text{CosSim}\\left(V_i', V_j^{gt}\\right) / \\tau\\right\\}_{j=1}^{J}, i\\right)\n$$",
+      "appliedRuleIds": [
+        "rule_1756630914188",
+        "rule_list_item_2023-10-05T12:00:00Z",
+        "rule_code_block_2023-10-05T12:00:00Z",
+        "rule_bold_2",
+        "rule_math_inline_3",
+        "rule_math_block_4",
+        "rule_list_numbered_5"
+      ],
+      "createdAt": "2025-08-31T10:01:07.434Z"
+    },
+    {
+      "id": "conv_1756634020683",
+      "originalContent": "### 3.3.3 CLIP知识蒸馏（CLIP Knowledge Distillation）\n\n目标：弥补3D-语言数据（百万级）与2D图像-语言数据（十亿级）的规模差距，保证模型泛化性：\n\n1. **监督信号来源**：用真实新视角图像、BEV对应区域图像的CLIP特征作为“真值特征” $ V_j^{gt} $；\n2. **蒸馏损失函数**：对g3D-LF预测的新视角表示 $ V' $、全景表示 $ V_i'' $、BEV表示 $ \\hat{R}' $ 计算对比损失，强制其与CLIP特征对齐（以新视角蒸馏为例）：\n\n$$\n\n\\mathcal{L}_{view\\_clip }=\\frac{1}{I} \\sum_{i=1}^{I} \\text{CrossEntropy}\\left(\\left\\{\\text{CosSim}\\left(V_i', V_j^{gt}\\right) / \\tau\\right\\}_{j=1}^{J}, i\\right)\n\n$$",
+      "convertedContent": "",
+      "appliedRuleIds": [
+        "rule_1756630914188",
+        "rule_list_item_2023-10-05T12:00:00Z",
+        "rule_code_block_2023-10-05T12:00:00Z",
+        "rule_bold_2",
+        "rule_math_inline_3",
+        "rule_math_block_4",
+        "rule_list_numbered_5"
+      ],
+      "createdAt": "2025-08-31T09:53:40.683Z"
+    },
+    {
       "id": "conv_1756620213177",
       "originalContent": "# 原始标题\n\n这是一个**粗体**文本示例。\n\n## 二级标题\n\n- 项目1\n- 项目2",
       "convertedContent": "## 原始标题\n\n这是一个__粗体__文本示例。\n\n### 二级标题\n\n- 项目1\n- 项目2",
