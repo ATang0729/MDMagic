@@ -1,6 +1,7 @@
 import express from 'express';
 import { AIService, Rule } from '../services/aiService';
 import { StorageService } from '../services/storageService';
+import { getModelscopeService } from '../services/modelscopeService';
 
 const router = express.Router();
 
@@ -124,11 +125,11 @@ router.get('/rules', async (req, res) => {
 
 /**
  * POST /api/markdown/rules
- * 添加新规则
+ * 添加新规则（支持智能合并）
  */
 router.post('/rules', async (req, res) => {
   try {
-    const { type, pattern, description, examples } = req.body;
+    const { type, pattern, description, examples, name } = req.body;
 
     if (!type || !pattern || !description) {
       return res.status(400).json({
@@ -137,22 +138,90 @@ router.post('/rules', async (req, res) => {
       });
     }
 
-    const newRule: Rule = {
-      id: `rule_${Date.now()}`,
+    // 检查是否存在相同type的规则
+    const existingRules = await StorageService.getRules();
+    const sameTypeRules = existingRules.filter(rule => rule.type === type);
+
+    // 准备新规则数据（但不立即创建ID）
+    const newRuleData = {
       type,
+      name: name || `${type}规则`,
       pattern,
       description,
-      examples: examples || [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      examples: examples || []
     };
 
-    await StorageService.addRules([newRule]);
+    let finalRule;
+    let mergePerformed = false;
+
+    // 如果存在相同type的规则，尝试智能合并
+    if (sameTypeRules.length > 0) {
+      try {
+        console.log(`发现 ${sameTypeRules.length} 个相同类型(${type})的规则，开始智能合并...`);
+        
+        // 创建临时规则对象用于合并（不保存到数据库）
+        const tempNewRule: Rule = {
+          id: `temp_${Date.now()}`,
+          ...newRuleData,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        
+        const modelscopeService = getModelscopeService();
+        const mergedRule = await modelscopeService.mergeRules(tempNewRule, sameTypeRules);
+        
+        if (mergedRule) {
+          // 使用第一个现有规则的ID，保持其创建时间
+          const targetRule = sameTypeRules[0];
+          finalRule = {
+            ...mergedRule,
+            id: targetRule.id,
+            createdAt: targetRule.createdAt,
+            updatedAt: new Date().toISOString()
+          };
+          
+          // 删除其他相同type的规则
+          for (let i = 1; i < sameTypeRules.length; i++) {
+            await StorageService.deleteRule(sameTypeRules[i].id);
+          }
+          
+          // 更新目标规则
+          await StorageService.updateRule(finalRule.id, {
+            type: finalRule.type,
+            name: finalRule.name,
+            pattern: finalRule.pattern,
+            description: finalRule.description,
+            examples: finalRule.examples
+          });
+          
+          mergePerformed = true;
+          console.log(`智能合并完成，合并了 ${sameTypeRules.length} 个规则`);
+        }
+      } catch (mergeError) {
+        console.error('智能合并失败，将直接添加新规则:', mergeError);
+        // 合并失败时，继续添加新规则
+      }
+    }
+
+    // 如果没有进行合并，则创建并添加新规则
+    if (!mergePerformed) {
+      finalRule = {
+        id: `rule_${Date.now()}`,
+        ...newRuleData,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      await StorageService.addRules([finalRule]);
+    }
 
     res.json({
       success: true,
-      rule: newRule,
-      message: '规则添加成功'
+      rule: finalRule,
+      merged: mergePerformed,
+      mergedCount: mergePerformed ? sameTypeRules.length : 0,
+      message: mergePerformed ? 
+        `规则智能合并成功，合并了 ${sameTypeRules.length} 个相同类型的规则` : 
+        '规则添加成功'
     });
   } catch (error) {
     console.error('添加规则API错误:', error);
@@ -170,10 +239,11 @@ router.post('/rules', async (req, res) => {
 router.put('/rules/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { type, pattern, description, examples } = req.body;
+    const { type, name, pattern, description, examples } = req.body;
 
     const updatedRule = await StorageService.updateRule(id, {
       type,
+      name,
       pattern,
       description,
       examples

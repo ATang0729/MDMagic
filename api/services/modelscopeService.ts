@@ -420,6 +420,221 @@ ${rulesText}
   }
 
   /**
+   * 智能规则合并
+   * 当创建新规则时，如果存在相同type的规则，则调用AI进行智能合并
+   */
+  async mergeRules(newRule: Rule, existingRules: Rule[]): Promise<ModelscopeResponse> {
+    if (!this.client) {
+      return {
+        success: false,
+        error: 'MODELSCOPE_ACCESS_TOKEN 未配置'
+      };
+    }
+    
+    try {
+      console.log(`开始合并规则，新规则类型: ${newRule.type}，现有规则数量: ${existingRules.length}`);
+      
+      const prompt = this.buildMergePrompt(newRule, existingRules);
+      
+      const response = await this.client.chat.completions.create({
+        model: this.model,
+        messages: [
+          {
+            role: 'system',
+            content: '你是一个Markdown规则合并专家，专门负责智能合并相同类型的规则。必须严格返回JSON格式，禁止任何非JSON内容。'
+          },
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+        max_tokens: 2000,
+        temperature: 0.2
+      });
+
+      const result = response.choices[0]?.message?.content;
+      
+      if (!result) {
+        throw new Error('API返回空结果');
+      }
+
+      // 解析JSON响应
+      const parsedResult = this.parseMergeResponse(result);
+      
+      // 检查解析结果是否有效
+      if (!parsedResult.mergedRule) {
+        throw new Error('JSON解析成功但未获得合并后的规则');
+      }
+      
+      // 确保合并后的规则有必要的字段
+      const mergedRule = {
+        ...parsedResult.mergedRule,
+        id: newRule.id || `rule_${newRule.type}_${Date.now()}`,
+        type: newRule.type,
+        createdAt: existingRules[0]?.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      
+      console.log(`规则合并成功，合并后规则ID: ${mergedRule.id}`);
+      
+      return {
+        success: true,
+        data: {
+          mergedRule,
+          summary: parsedResult.summary || '规则合并完成',
+          confidence: parsedResult.confidence || 0.9
+        }
+      };
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : '规则合并失败';
+      console.error('魔搭社区规则合并失败:', errorMessage);
+      
+      return {
+        success: false,
+        error: errorMessage
+      };
+    }
+  }
+
+  /**
+   * 构建规则合并提示词
+   */
+  private buildMergePrompt(newRule: Rule, existingRules: Rule[]): string {
+    const existingRulesText = existingRules.map((rule, index) => 
+      `现有规则${index + 1}:
+` +
+      `- 名称: ${rule.name || rule.type}
+` +
+      `- 描述: ${rule.description}
+` +
+      `- 模式: ${rule.pattern}
+` +
+      `- 示例: ${rule.examples.join(', ')}
+`
+    ).join('\n');
+
+    return `你是一个Markdown规则合并专家，需要将新规则与现有的相同类型规则进行智能合并。
+
+重要要求：
+1. 必须严格返回JSON格式
+2. 禁止返回任何解释、说明或其他文字
+3. 禁止使用markdown代码块包装
+4. 以新规则为准解决冲突
+5. 智能合并pattern和examples，保留有价值的内容
+6. 响应必须以{开始，以}结束
+
+新规则：
+- 名称: ${newRule.name || newRule.type}
+- 描述: ${newRule.description}
+- 模式: ${newRule.pattern}
+- 示例: ${newRule.examples.join(', ')}
+
+${existingRulesText}
+
+合并策略：
+1. 以新规则的name、description为准
+2. 智能合并pattern，优先使用新规则的pattern，但可以扩展以兼容现有规则
+3. 合并examples，去重并保留最有代表性的示例
+4. 确保合并后的规则更加完善和准确
+
+返回格式（严格遵循）：
+{
+  "mergedRule": {
+    "name": "合并后的规则名称",
+    "description": "合并后的规则描述",
+    "pattern": "合并后的规则模式",
+    "examples": ["合并后的示例1", "合并后的示例2"]
+  },
+  "summary": "合并结果摘要",
+  "confidence": 0.95
+}
+
+警告：任何非JSON内容都将导致解析失败！只返回纯JSON对象！`;
+  }
+
+  /**
+   * 解析规则合并响应
+   */
+  private parseMergeResponse(response: string): any {
+    try {
+      console.log('开始解析合并响应，原始长度:', response.length);
+      
+      // 清理响应字符串
+      let cleanResponse = response.trim();
+      
+      // 移除可能的markdown代码块标记
+      cleanResponse = cleanResponse.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+      cleanResponse = cleanResponse.replace(/^```\s*/, '').replace(/\s*```$/, '');
+      
+      // 查找完整的JSON对象
+      let jsonStr = '';
+      let braceCount = 0;
+      let inString = false;
+      let escapeNext = false;
+      let jsonStart = -1;
+      
+      for (let i = 0; i < cleanResponse.length; i++) {
+        const char = cleanResponse[i];
+        
+        if (escapeNext) {
+          escapeNext = false;
+          continue;
+        }
+        
+        if (char === '\\') {
+          escapeNext = true;
+          continue;
+        }
+        
+        if (char === '"' && !escapeNext) {
+          inString = !inString;
+        }
+        
+        if (!inString) {
+          if (char === '{') {
+            if (braceCount === 0) {
+              jsonStart = i;
+            }
+            braceCount++;
+          } else if (char === '}') {
+            braceCount--;
+            if (braceCount === 0 && jsonStart !== -1) {
+              jsonStr = cleanResponse.substring(jsonStart, i + 1);
+              break;
+            }
+          }
+        }
+      }
+      
+      if (!jsonStr) {
+        // 如果没有找到完整的JSON，尝试原来的方法
+        const jsonMatch = cleanResponse.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          jsonStr = jsonMatch[0];
+        }
+      }
+      
+      if (jsonStr) {
+        console.log('提取的合并JSON字符串前100字符:', jsonStr.substring(0, 100));
+        
+        // 修复常见的JSON格式问题
+        jsonStr = this.fixJsonString(jsonStr);
+        
+        const parsed = JSON.parse(jsonStr);
+        console.log('合并JSON解析成功');
+        return parsed;
+      }
+      
+      throw new Error('无法从响应中提取JSON内容');
+    } catch (error) {
+      console.error('解析合并响应失败:', error);
+      console.error('原始响应前500字符:', response.substring(0, 500));
+      // 重新抛出异常
+      throw error;
+    }
+  }
+
+  /**
    * 修复JSON字符串中的常见问题
    */
   private fixJsonString(jsonStr: string): string {
