@@ -1,6 +1,5 @@
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
-import { mockExtractStyles, mockConvertStyles, mockTestConnection } from './mockAiService.js';
 import { getModelscopeService, ModelscopeService } from './modelscopeService.js';
 
 // 定义Rule接口，确保类型一致性
@@ -148,19 +147,21 @@ export class AIService {
 
     // 优先使用魔搭社区服务
     if (this.modelscopeService) {
-      try {
-        console.log('使用魔搭社区API进行样式提取');
-        const result = await this.modelscopeService.extractStyles(content, extractTypes);
-        if (result.success) {
-          return {
-            success: true,
-            rules: result.rules || [],
-            message: result.message || '提取成功'
-          };
-        }
-      } catch (error) {
-        console.error('魔搭社区样式提取失败:', error);
-        console.log('切换到备用服务');
+      console.log('使用魔搭社区API进行样式提取');
+      const result = await this.modelscopeService.extractStyles(content, extractTypes);
+      if (result.success) {
+        return {
+          success: true,
+          rules: result.rules || [],
+          message: result.message || '提取成功'
+        };
+      } else {
+        // 直接返回失败结果，不使用备用服务
+        return {
+          success: false,
+          rules: [],
+          message: result.error || '样式提取失败'
+        };
       }
     }
 
@@ -226,17 +227,19 @@ export class AIService {
         };
       } catch (error) {
         console.error('OpenAI样式提取失败:', error);
-        console.log('切换到模拟AI服务进行样式提取');
+        return {
+          success: false,
+          rules: [],
+          message: error instanceof Error ? error.message : 'OpenAI样式提取失败'
+        };
       }
     }
 
-    // 最后备用：使用模拟AI服务
-    console.log('使用模拟AI服务进行样式提取');
-    const mockResult = await mockExtractStyles(content, extractTypes);
+    // 如果没有可用的AI服务，直接返回失败
     return {
-      success: mockResult.success,
-      rules: mockResult.data?.rules || [],
-      message: mockResult.data?.message || '提取成功'
+      success: false,
+      rules: [],
+      message: '没有可用的AI服务'
     };
   }
 
@@ -311,14 +314,12 @@ export class AIService {
       }
     }
 
-    // 最后备用：使用模拟AI服务
-    console.log('使用模拟AI服务进行样式转换');
-    const mockResult = await mockConvertStyles(content, rules, targetStyle);
+    // 如果没有可用的AI服务，直接返回失败
     return {
-      success: mockResult.success,
-      convertedContent: mockResult.data?.convertedContent || '',
-      appliedRules: mockResult.data?.appliedRules || [],
-      message: mockResult.data?.message || '转换成功'
+      success: false,
+      convertedContent: '',
+      appliedRules: [],
+      message: '没有可用的AI服务'
     };
   }
 
@@ -367,12 +368,10 @@ export class AIService {
       }
     }
 
-    // 最后备用：使用模拟AI服务
-    console.log('使用模拟AI服务进行连接测试');
-    const mockResult = await mockTestConnection();
+    // 如果没有可用的AI服务，直接返回失败
     return {
-      success: mockResult.success,
-      message: mockResult.data?.message || '模拟AI服务连接成功'
+      success: false,
+      message: '没有可用的AI服务'
     };
   }
 }

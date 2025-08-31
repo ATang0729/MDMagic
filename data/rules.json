@@ -252,6 +252,655 @@
       ],
       "createdAt": "2023-05-01T00:00:02Z",
       "updatedAt": "2023-05-01T00:00:02Z"
+    },
+    {
+      "id": "rule_heading_2023-10-05T14:48:00Z",
+      "type": "heading",
+      "name": "一级标题",
+      "description": "用于文章的主要标题",
+      "pattern": "# 文本",
+      "examples": [
+        "# CUTLASS：通过张量和空间微内核处理多维数据的原则性抽象",
+        "# CuTe"
+      ],
+      "createdAt": "2023-10-05T14:48:00Z",
+      "updatedAt": "2023-10-05T14:48:00Z"
+    },
+    {
+      "id": "rule_subheading_2023-10-05T14:48:00Z",
+      "type": "subheading",
+      "name": "二级标题",
+      "description": "用于文章的子标题",
+      "pattern": "## 文本",
+      "examples": [
+        "## CUTLASS 3.x的亮点",
+        "## CuTe布局和张量"
+      ],
+      "createdAt": "2023-10-05T14:48:00Z",
+      "updatedAt": "2023-10-05T14:48:00Z"
+    },
+    {
+      "id": "rule_paragraph_2023-10-05T14:48:00Z",
+      "type": "paragraph",
+      "name": "段落",
+      "description": "用于普通文本内容",
+      "pattern": "文本",
+      "examples": [
+        "在生成式AI时代，充分利用GPU的潜力对于训练更好的模型并大规模服务用户至关重要。",
+        "CUTLASS 3.x使用单一词汇类型（`cute::Layout`），从而实现了简化、正式化和统一的布局表示，帮助用户轻松编写极快的内核。"
+      ],
+      "createdAt": "2023-10-05T14:48:00Z",
+      "updatedAt": "2023-10-05T14:48:00Z"
+    },
+    {
+      "id": "rule_list_2023-10-05T14:48:00Z",
+      "type": "list",
+      "name": "无序列表",
+      "description": "用于列出项目",
+      "pattern": "- 文本",
+      "examples": [
+        "- 能够自定义库设计中的任何层，同时保留与其他层的可组合性，以提高开发者生产力和更清晰的移动部件分离",
+        "- `Shape`定义一个或多个坐标空间并在它们之间映射。"
+      ],
+      "createdAt": "2023-10-05T14:48:00Z",
+      "updatedAt": "2023-10-05T14:48:00Z"
+    },
+    {
+      "id": "rule_code_block_2023-10-05T14:48:00Z",
+      "type": "code block",
+      "name": "代码块",
+      "description": "用于展示代码",
+      "pattern": "```代码```",
+      "examples": [
+        "```\nTensor gA = . . . // Tile of 64x16 gmem for A\nTensor gB = . . . // Tile of 96x16 gmem for B\nTensor gC = . . . // Tile of 64x96 gmem for C\n```"
+      ],
+      "createdAt": "2023-10-05T14:48:00Z",
+      "updatedAt": "2023-10-05T14:48:00Z"
+    },
+    {
+      "id": "rule_image_2023-10-05T14:48:00Z",
+      "type": "image",
+      "name": "图片",
+      "description": "用于插入图片",
+      "pattern": "![](URL)",
+      "examples": [
+        "![](https://p0-xtjj-private.juejin.cn/tos-cn-i-73owjymdk6/ed9bcf0053e646d1a801ee2c5efc3d8e~tplv-73owjymdk6-jj-mark-v1:0:0:0:0:5o6Y6YeR5oqA5pyv56S-5Yy6IEAgU21hcnRGbG93QUk=:q75.awebp?policy=eyJ2bSI6MywidWlkIjoiMTA4MTk4NTE4MDczODgwIn0%3D&rk3s=e9ecf3d6&x-orig-authkey=f32326d3454f2ac7e96d3d06cdbb035152127018&x-orig-expires=1756650899&x-orig-sign=bldLjKFheroiWuAyzF%2FzG1fFWqo%3D)",
+        "![](https://p0-xtjj-private.juejin.cn/tos-cn-i-73owjymdk6/5562811322234f81be2a4a5e997c5e4f~tplv-73owjymdk6-jj-mark-v1:0:0:0:0:5o6Y6YeR5oqA5pyv56S-5Yy6IEAgU21hcnRGbG93QUk=:q75.awebp?policy=eyJ2bSI6MywidWlkIjoiMTA4MTk4NTE4MDczODgwIn0%3D&rk3s=e9ecf3d6&x-orig-authkey=f32326d3454f2ac7e96d3d06cdbb035152127018&x-orig-expires=1756650898&x-orig-sign=iBcMbkf6cGYh0tZmWXM0re2xKxU%3D)"
+      ],
+      "createdAt": "2023-10-05T14:48:00Z",
+      "updatedAt": "2023-10-05T14:48:00Z"
+    },
+    {
+      "id": "rule_inline_code_2023-10-05T14:48:00Z",
+      "type": "inline code",
+      "name": "行内代码",
+      "description": "用于展示代码片段",
+      "pattern": "`代码`",
+      "examples": [
+        "`Layout<Shape,Stride>`",
+        "`Tensor<Engine,Layout>`"
+      ],
+      "createdAt": "2023-10-05T14:48:00Z",
+      "updatedAt": "2023-10-05T14:48:00Z"
+    },
+    {
+      "id": "rule_heading_20231005T123456Z",
+      "type": "heading",
+      "name": "一级标题",
+      "description": "用于表示文档的主要标题",
+      "pattern": "# 文本",
+      "examples": [
+        "# 测试标题"
+      ],
+      "createdAt": "2023-10-05T12:34:56Z",
+      "updatedAt": "2023-10-05T12:34:56Z"
+    },
+    {
+      "id": "rule_emphasis_bold_20231005T123456Z",
+      "type": "emphasis",
+      "name": "粗体文本",
+      "description": "用于强调文本的重要性",
+      "pattern": "**文本**",
+      "examples": [
+        "**粗体文本**"
+      ],
+      "createdAt": "2023-10-05T12:34:56Z",
+      "updatedAt": "2023-10-05T12:34:56Z"
+    },
+    {
+      "id": "rule_emphasis_italic_20231005T123456Z",
+      "type": "emphasis",
+      "name": "斜体文本",
+      "description": "用于表示文本的次要强调或引用",
+      "pattern": "*文本*",
+      "examples": [
+        "*斜体文本*"
+      ],
+      "createdAt": "2023-10-05T12:34:56Z",
+      "updatedAt": "2023-10-05T12:34:56Z"
+    },
+    {
+      "id": "rule_list_unordered_20231005T123456Z",
+      "type": "list",
+      "name": "无序列表",
+      "description": "用于列出项目，顺序不重要",
+      "pattern": "- 文本",
+      "examples": [
+        "- 列表项1",
+        "- 列表项2"
+      ],
+      "createdAt": "2023-10-05T12:34:56Z",
+      "updatedAt": "2023-10-05T12:34:56Z"
+    },
+    {
+      "id": "rule_heading_2023-10-05T14:48:00Z",
+      "type": "heading",
+      "name": "一级标题",
+      "description": "用于表示最高级别的标题",
+      "pattern": "# 文本",
+      "examples": [
+        "# 测试重试机制"
+      ],
+      "createdAt": "2023-10-05T14:48:00Z",
+      "updatedAt": "2023-10-05T14:48:00Z"
+    },
+    {
+      "id": "rule_emphasis_2023-10-05T14:48:00Z",
+      "type": "emphasis",
+      "name": "粗体文本",
+      "description": "用于强调文本的重要性",
+      "pattern": "**文本**",
+      "examples": [
+        "**粗体文本**"
+      ],
+      "createdAt": "2023-10-05T14:48:00Z",
+      "updatedAt": "2023-10-05T14:48:00Z"
+    },
+    {
+      "id": "rule_heading_1672531200",
+      "type": "heading",
+      "name": "一级标题",
+      "description": "用于表示最高级别的标题",
+      "pattern": "# 标题内容",
+      "examples": [
+        "# 测试重试机制"
+      ],
+      "createdAt": "2023-01-01T00:00:00Z",
+      "updatedAt": "2023-01-01T00:00:00Z"
+    },
+    {
+      "id": "rule_emphasis_bold_1672531200",
+      "type": "emphasis",
+      "name": "粗体文本",
+      "description": "用于强调文本的重要性",
+      "pattern": "**文本内容**",
+      "examples": [
+        "**粗体文本**"
+      ],
+      "createdAt": "2023-01-01T00:00:00Z",
+      "updatedAt": "2023-01-01T00:00:00Z"
+    },
+    {
+      "id": "rule_emphasis_italic_1672531200",
+      "type": "emphasis",
+      "name": "斜体文本",
+      "description": "用于表示文本的次要强调",
+      "pattern": "*文本内容*",
+      "examples": [
+        "*斜体文本*"
+      ],
+      "createdAt": "2023-01-01T00:00:00Z",
+      "updatedAt": "2023-01-01T00:00:00Z"
+    },
+    {
+      "id": "rule_list_unordered_1672531200",
+      "type": "list",
+      "name": "无序列表",
+      "description": "用于列出项目，顺序不重要",
+      "pattern": "- 列表项",
+      "examples": [
+        "- 列表项1",
+        "- 列表项2"
+      ],
+      "createdAt": "2023-01-01T00:00:00Z",
+      "updatedAt": "2023-01-01T00:00:00Z"
+    },
+    {
+      "id": "rule_heading_20231005T123456Z",
+      "type": "heading",
+      "name": "二级标题",
+      "description": "表示文档中的二级标题",
+      "pattern": "## 标题内容",
+      "examples": [
+        "## 7.2 未来方向"
+      ],
+      "createdAt": "2023-10-05T12:34:56Z",
+      "updatedAt": "2023-10-05T12:34:56Z"
+    },
+    {
+      "id": "rule_ordered_list_20231005T123456Z",
+      "type": "ordered list",
+      "name": "有序列表",
+      "description": "表示文档中的有序列表项",
+      "pattern": "数字. 列表内容",
+      "examples": [
+        "1. **动态环境适配**：设计“动态特征场更新策略”，实时移除消失物体的特征点、添加新出现物体的特征，适配行人/物体移动的场景；"
+      ],
+      "createdAt": "2023-10-05T12:34:56Z",
+      "updatedAt": "2023-10-05T12:34:56Z"
+    },
+    {
+      "id": "rule_bold_20231005T123456Z",
+      "type": "bold",
+      "name": "粗体",
+      "description": "表示文本中的粗体部分",
+      "pattern": "**文本内容**",
+      "examples": [
+        "**动态环境适配**"
+      ],
+      "createdAt": "2023-10-05T12:34:56Z",
+      "updatedAt": "2023-10-05T12:34:56Z"
+    },
+    {
+      "id": "rule_heading_20231005T123456Z",
+      "type": "heading",
+      "name": "二级标题",
+      "description": "表示章节或部分的标题",
+      "pattern": "## 标题内容",
+      "examples": [
+        "## 7.2 未来方向"
+      ],
+      "createdAt": "2023-10-05T12:34:56Z",
+      "updatedAt": "2023-10-05T12:34:56Z"
+    },
+    {
+      "id": "rule_ordered_list_20231005T123456Z",
+      "type": "ordered list",
+      "name": "有序列表",
+      "description": "表示按顺序排列的项目列表",
+      "pattern": "1. 列表项内容",
+      "examples": [
+        "1. **动态环境适配**：设计“动态特征场更新策略”，实时移除消失物体的特征点、添加新出现物体的特征，适配行人/物体移动的场景；"
+      ],
+      "createdAt": "2023-10-05T12:34:56Z",
+      "updatedAt": "2023-10-05T12:34:56Z"
+    },
+    {
+      "id": "rule_bold_20231005T123456Z",
+      "type": "bold",
+      "name": "粗体",
+      "description": "使文本加粗",
+      "pattern": "**文本内容**",
+      "examples": [
+        "**动态环境适配**"
+      ],
+      "createdAt": "2023-10-05T12:34:56Z",
+      "updatedAt": "2023-10-05T12:34:56Z"
+    },
+    {
+      "id": "rule_heading_1683000000",
+      "type": "heading",
+      "name": "二级标题",
+      "description": "表示章节或部分的标题",
+      "pattern": "## 标题内容",
+      "examples": [
+        "## 7.2 未来方向"
+      ],
+      "createdAt": "2023-05-01T00:00:00Z",
+      "updatedAt": "2023-05-01T00:00:00Z"
+    },
+    {
+      "id": "rule_list_ordered_1683000000",
+      "type": "list",
+      "name": "有序列表",
+      "description": "使用数字和句号表示的列表项",
+      "pattern": "1. 列表项内容",
+      "examples": [
+        "1. **动态环境适配**：设计“动态特征场更新策略”，实时移除消失物体的特征点、添加新出现物体的特征，适配行人/物体移动的场景；"
+      ],
+      "createdAt": "2023-05-01T00:00:00Z",
+      "updatedAt": "2023-05-01T00:00:00Z"
+    },
+    {
+      "id": "rule_bold_1683000000",
+      "type": "bold",
+      "name": "粗体",
+      "description": "使文本加粗",
+      "pattern": "**文本内容**",
+      "examples": [
+        "**动态环境适配**"
+      ],
+      "createdAt": "2023-05-01T00:00:00Z",
+      "updatedAt": "2023-05-01T00:00:00Z"
+    },
+    {
+      "id": "rule_heading_20231010T123456Z",
+      "type": "heading",
+      "name": "一级标题",
+      "description": "用于文档的主要标题",
+      "pattern": "# (.*)",
+      "examples": [
+        "# 1. 研究背景与核心动机",
+        "# 2. 相关工作：现有方法的局限与g3D-LF的突破"
+      ],
+      "createdAt": "2023-10-10T12:34:56Z",
+      "updatedAt": "2023-10-10T12:34:56Z"
+    },
+    {
+      "id": "rule_subheading_20231010T123456Z",
+      "type": "subheading",
+      "name": "二级标题",
+      "description": "用于文档的次要标题",
+      "pattern": "## (.*)",
+      "examples": [
+        "## 1.1 具身AI的3D表示痛点",
+        "## 1.2 g3D-LF的核心定位"
+      ],
+      "createdAt": "2023-10-10T12:34:56Z",
+      "updatedAt": "2023-10-10T12:34:56Z"
+    },
+    {
+      "id": "rule_subsubheading_20231010T123456Z",
+      "type": "subsubheading",
+      "name": "三级标题",
+      "description": "用于文档的详细标题",
+      "pattern": "### (.*)",
+      "examples": [
+        "### 3.1.1 数据集规模与来源",
+        "### 3.1.2 数据集组织逻辑"
+      ],
+      "createdAt": "2023-10-10T12:34:56Z",
+      "updatedAt": "2023-10-10T12:34:56Z"
+    },
+    {
+      "id": "rule_list_ordered_20231010T123456Z",
+      "type": "list",
+      "name": "有序列表",
+      "description": "用于列出有序项目",
+      "pattern": "\\d+\\. (.*)",
+      "examples": [
+        "1. 3D空间关系建模缺失",
+        "2. 语言-3D语义鸿沟"
+      ],
+      "createdAt": "2023-10-10T12:34:56Z",
+      "updatedAt": "2023-10-10T12:34:56Z"
+    },
+    {
+      "id": "rule_list_unordered_20231010T123456Z",
+      "type": "list",
+      "name": "无序列表",
+      "description": "用于列出无序项目",
+      "pattern": "- (.*)",
+      "examples": [
+        "- 物体级：类别（如“床”“台灯”）、特征（如“带白色条纹被子的木床”）"
+      ],
+      "createdAt": "2023-10-10T12:34:56Z",
+      "updatedAt": "2023-10-10T12:34:56Z"
+    },
+    {
+      "id": "rule_table_20231010T123456Z",
+      "type": "table",
+      "name": "表格",
+      "description": "用于展示数据",
+      "pattern": "\\| (.*) \\|",
+      "examples": [
+        "| 研究方向         | 现有方法代表                           | 核心局限                        | g3D-LF的突破点                        |"
+      ],
+      "createdAt": "2023-10-10T12:34:56Z",
+      "updatedAt": "2023-10-10T12:34:56Z"
+    },
+    {
+      "id": "rule_image_20231010T123456Z",
+      "type": "image",
+      "name": "图片",
+      "description": "用于插入图片",
+      "pattern": "!\\[(.*)\\]\\((.*)\\)",
+      "examples": [
+        "![](https://files.mdnice.com/user/58235/f382c5d6-080c-4072-889f-0571bbbc7de7.png)"
+      ],
+      "createdAt": "2023-10-10T12:34:56Z",
+      "updatedAt": "2023-10-10T12:34:56Z"
+    },
+    {
+      "id": "rule_blockquote_20231010T123456Z",
+      "type": "blockquote",
+      "name": "引用块",
+      "description": "用于引用内容",
+      "pattern": "> (.*)",
+      "examples": [
+        "> 论文链接：https://arxiv.org/pdf/2411.17030"
+      ],
+      "createdAt": "2023-10-10T12:34:56Z",
+      "updatedAt": "2023-10-10T12:34:56Z"
+    },
+    {
+      "id": "rule_code_inline_20231010T123456Z",
+      "type": "code",
+      "name": "行内代码",
+      "description": "用于显示行内代码",
+      "pattern": "`(.*)`",
+      "examples": [
+        "`g3D-LF`"
+      ],
+      "createdAt": "2023-10-10T12:34:56Z",
+      "updatedAt": "2023-10-10T12:34:56Z"
+    },
+    {
+      "id": "rule_code_block_20231010T123456Z",
+      "type": "code",
+      "name": "代码块",
+      "description": "用于显示代码块",
+      "pattern": "```(.*)```",
+      "examples": [
+        "```python\nprint('Hello, world!')\n```"
+      ],
+      "createdAt": "2023-10-10T12:34:56Z",
+      "updatedAt": "2023-10-10T12:34:56Z"
+    },
+    {
+      "id": "rule_horizontal_rule_20231010T123456Z",
+      "type": "horizontal rule",
+      "name": "水平线",
+      "description": "用于分隔内容",
+      "pattern": "---",
+      "examples": [
+        "---"
+      ],
+      "createdAt": "2023-10-10T12:34:56Z",
+      "updatedAt": "2023-10-10T12:34:56Z"
+    },
+    {
+      "id": "rule_header_20231001",
+      "type": "header",
+      "name": "一级标题",
+      "description": "Markdown中的一级标题，使用#符号开头",
+      "pattern": "# (.*)",
+      "examples": [
+        "# 1. 研究背景与核心动机",
+        "# 2. 相关工作：现有方法的局限与g3D-LF的突破"
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "rule_header_20231002",
+      "type": "header",
+      "name": "二级标题",
+      "description": "Markdown中的二级标题，使用##符号开头",
+      "pattern": "## (.*)",
+      "examples": [
+        "## 1.1 具身AI的3D表示痛点",
+        "## 1.2 g3D-LF的核心定位"
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "rule_header_20231003",
+      "type": "header",
+      "name": "三级标题",
+      "description": "Markdown中的三级标题，使用###符号开头",
+      "pattern": "### (.*)",
+      "examples": [
+        "### 3.1 基础支撑：大规模3D-语言数据集",
+        "### 3.2 核心架构：3D-语言特征场编码"
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "rule_bold_20231004",
+      "type": "bold",
+      "name": "粗体文本",
+      "description": "Markdown中的粗体文本，使用两个星号或下划线包裹",
+      "pattern": "(\\*\\*(.*?)\\*\\*|__(.*?)__)",
+      "examples": [
+        "**大规模3D-语言数据集**",
+        "**图1：g3D-LF功能与应用场景示意图**"
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "rule_image_20231005",
+      "type": "image",
+      "name": "图片",
+      "description": "Markdown中的图片，使用![]()语法",
+      "pattern": "!\\[(.*?)\\]\\((.*?)\\)",
+      "examples": [
+        "![](https://files.mdnice.com/user/58235/f382c5d6-080c-4072-889f-0571bbbc7de7.png)",
+        "![](https://files.mdnice.com/user/58235/247d5f45-1a89-43ef-86b1-20ebe8103677.png)"
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "rule_blockquote_20231006",
+      "type": "blockquote",
+      "name": "引用块",
+      "description": "Markdown中的引用块，使用>符号开头",
+      "pattern": "> (.*)",
+      "examples": [
+        "> 论文链接：https://arxiv.org/pdf/2411.17030"
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "rule_table_20231007",
+      "type": "table",
+      "name": "表格",
+      "description": "Markdown中的表格，使用|符号分隔列，使用-符号分隔表头和内容",
+      "pattern": "\\|.*?\\|\\s*\\n\\|.*?-.*?\\|\\s*\\n(\\|.*?\\|\\s*\\n)*",
+      "examples": [
+        "| 研究方向         | 现有方法代表                           | 核心局限                        | g3D-LF的突破点                        |\n| ------------ | -------------------------------- | --------------------------- | --------------------------------- |\n| 通用3D特征场      | HNR [57]、3D-FF [44]            | 依赖2D视觉监督，无语言语义对齐能力          | 首个引入3D-语言预训练的特征场，通过多级别对比学习对齐语言    |"
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "rule_list_ordered_20231008",
+      "type": "list_ordered",
+      "name": "有序列表",
+      "description": "Markdown中的有序列表，使用数字加点号开头",
+      "pattern": "\\d+\\. (.*)",
+      "examples": [
+        "1.  **3D空间关系建模缺失**：依赖CLIP、DINOv2等2D基础模型提供监督信号，无法原生捕捉3D场景中的几何结构与物体空间位置关系；",
+        "1.  **MLPview网络**：输入特征场中邻近特征（k=4个最近邻），预测任意3D点的："
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "rule_list_unordered_20231009",
+      "type": "list_unordered",
+      "name": "无序列表",
+      "description": "Markdown中的无序列表，使用星号、加号或减号开头",
+      "pattern": "(\\*|\\+|-) (.*)",
+      "examples": [
+        "-   从任意3D位置预测新视角场景表示；",
+        "-   生成以智能体为中心的BEV地图（覆盖16.8m×16.8m区域）；"
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "rule_code_inline_20231010",
+      "type": "code_inline",
+      "name": "行内代码",
+      "description": "Markdown中的行内代码，使用反引号包裹",
+      "pattern": "`(.*?)`",
+      "examples": [
+        "`g3D-LF`",
+        "`RGB-D图像`"
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "rule_horizontal_rule_20231011",
+      "type": "horizontal_rule",
+      "name": "水平线",
+      "description": "Markdown中的水平线，使用三个或更多星号、减号或下划线",
+      "pattern": "(\\*{3,}|-{3,}|_{3,})",
+      "examples": [
+        "---",
+        "---"
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "rule_headers_1756623764346",
+      "type": "headers",
+      "name": "标题样式规则",
+      "description": "提取的标题格式规则",
+      "pattern": "# 标题使用单个#号，## 二级标题使用双#号",
+      "examples": [
+        "# 主标题",
+        "## 副标题"
+      ],
+      "createdAt": "2025-08-31T07:02:44.346Z",
+      "updatedAt": "2025-08-31T07:02:44.346Z"
+    },
+    {
+      "id": "rule_emphasis_1756623764346",
+      "type": "emphasis",
+      "name": "强调样式规则",
+      "description": "提取的文本强调规则",
+      "pattern": "**粗体文本** 和 *斜体文本*",
+      "examples": [
+        "**重要内容**",
+        "*强调内容*"
+      ],
+      "createdAt": "2025-08-31T07:02:44.346Z",
+      "updatedAt": "2025-08-31T07:02:44.346Z"
+    },
+    {
+      "id": "rule_lists_1756623764346",
+      "type": "lists",
+      "name": "列表样式规则",
+      "description": "提取的列表格式规则",
+      "pattern": "- 无序列表项\n1. 有序列表项",
+      "examples": [
+        "- 项目一",
+        "1. 第一项"
+      ],
+      "createdAt": "2025-08-31T07:02:44.346Z",
+      "updatedAt": "2025-08-31T07:02:44.346Z"
+    },
+    {
+      "id": "rule_code_1756623764346",
+      "type": "code",
+      "name": "代码样式规则",
+      "description": "提取的代码格式规则",
+      "pattern": "`内联代码` 和 ```代码块```",
+      "examples": [
+        "`console.log()",
+        "```javascript\ncode\n```"
+      ],
+      "createdAt": "2025-08-31T07:02:44.346Z",
+      "updatedAt": "2025-08-31T07:02:44.346Z"
     }
   ]
 }

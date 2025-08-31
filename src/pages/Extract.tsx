@@ -8,8 +8,10 @@ const Extract: React.FC = () => {
   const [extractTypes, setExtractTypes] = useState<string[]>(['heading', 'list', 'emphasis', 'code']);
   const [isLoading, setIsLoading] = useState(false);
   const [extractedRules, setExtractedRules] = useState<Rule[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const [error, setError] = useState<string>('');
+  const [success, setSuccess] = useState<string>('');
+  const [retryCount, setRetryCount] = useState(0);
+  const [isRetrying, setIsRetrying] = useState(false);
 
   const availableTypes = [
     { id: 'heading', label: '标题样式', description: '提取各级标题的格式规则' },
@@ -29,35 +31,54 @@ const Extract: React.FC = () => {
     );
   };
 
-  const handleExtract = async () => {
-    if (!inputContent.trim()) {
-      setError('请输入要分析的Markdown内容');
-      return;
-    }
+  const handleExtract = async (currentRetry: number = 0) => {
+    if (!inputContent.trim()) return;
 
-    if (extractTypes.length === 0) {
-      setError('请至少选择一种要提取的样式类型');
-      return;
+    const maxRetries = 3;
+    const isFirstAttempt = currentRetry === 0;
+    
+    if (isFirstAttempt) {
+      setIsLoading(true);
+      setError('');
+      setSuccess('');
+      setRetryCount(0);
+      setIsRetrying(false);
+    } else {
+      setIsRetrying(true);
+      setRetryCount(currentRetry);
     }
-
-    setIsLoading(true);
-    setError(null);
-    setSuccess(null);
 
     try {
       const response = await extractStyles(inputContent, extractTypes);
       
-      if (response.success) {
+      if (response.success && response.rules) {
         setExtractedRules(response.rules);
-        setSuccess(`成功提取了 ${response.rules.length} 条样式规则`);
+        setSuccess(`成功提取${response.rules.length}个样式规则${currentRetry > 0 ? ` (重试${currentRetry}次后成功)` : ''}`);
+        setIsLoading(false);
+        setIsRetrying(false);
+        setRetryCount(0);
       } else {
-        setError(response.message || '样式提取失败');
+        throw new Error(response.message || '提取失败');
       }
     } catch (error) {
-      console.error('样式提取错误:', error);
-      setError('网络错误，请检查服务器连接');
-    } finally {
-      setIsLoading(false);
+      console.error(`提取样式失败 (尝试 ${currentRetry + 1}/${maxRetries + 1}):`, error);
+      
+      if (currentRetry < maxRetries) {
+        // 自动重试，延迟递增
+        const delay = 1000 * (currentRetry + 1); // 1秒、2秒、3秒
+        console.log(`将在${delay}ms后进行第${currentRetry + 1}次重试`);
+        
+        setTimeout(() => {
+          handleExtract(currentRetry + 1);
+        }, delay);
+      } else {
+        // 所有重试都失败了
+        const errorMessage = error instanceof Error ? error.message : '网络错误或服务器异常';
+        setError(`提取失败 (已重试${maxRetries}次): ${errorMessage}`);
+        setIsLoading(false);
+        setIsRetrying(false);
+        setRetryCount(0);
+      }
     }
   };
 
@@ -162,36 +183,18 @@ const Extract: React.FC = () => {
             </div>
 
             {/* 提取选项 */}
-            <div className="bg-white rounded-xl shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">提取选项</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {availableTypes.map((type) => (
-                  <label key={type.id} className="flex items-start space-x-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={extractTypes.includes(type.id)}
-                      onChange={() => handleExtractTypeChange(type.id)}
-                      className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    />
-                    <div className="flex-1">
-                      <div className="text-sm font-medium text-gray-900">{type.label}</div>
-                      <div className="text-xs text-gray-500">{type.description}</div>
-                    </div>
-                  </label>
-                ))}
-              </div>
-            </div>
+            {/* 提取选项已移除，使用默认的extractTypes */}
 
             {/* 提取按钮 */}
             <button
-              onClick={handleExtract}
+              onClick={() => handleExtract()}
               disabled={isLoading || !inputContent.trim()}
               className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
             >
               {isLoading ? (
                 <>
                   <Loader className="w-5 h-5 mr-2 animate-spin" />
-                  正在分析...
+                  {isRetrying ? `正在重试 (${retryCount}/3)...` : '正在分析...'}
                 </>
               ) : (
                 <>
@@ -200,6 +203,16 @@ const Extract: React.FC = () => {
                 </>
               )}
             </button>
+            
+            {/* 重试状态指示器 */}
+            {isRetrying && (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 flex items-center">
+                <Loader className="w-5 h-5 text-yellow-600 mr-2 animate-spin" />
+                <span className="text-yellow-700">
+                  第{retryCount}次重试中... (最多重试3次)
+                </span>
+              </div>
+            )}
           </div>
 
           {/* 结果区域 */}

@@ -112,7 +112,7 @@ export class ModelscopeService {
         messages: [
           {
             role: 'system',
-            content: '你是一个Markdown样式分析专家，专门从文本中提取格式规则。请严格按照JSON格式返回结果。'
+            content: '你是一个Markdown样式分析专家，专门从文本中提取格式规则。必须严格返回JSON格式，禁止任何非JSON内容。'
           },
           {
             role: 'user',
@@ -131,15 +131,23 @@ export class ModelscopeService {
 
       // 解析JSON响应
       const parsedResult = this.parseExtractResponse(result);
+      
+      // 检查解析结果是否有效
+      if (!parsedResult.rules || parsedResult.rules.length === 0) {
+        throw new Error('JSON解析成功但未提取到有效规则');
+      }
+      
       return {
         success: true,
         ...parsedResult
       };
     } catch (error) {
-      console.error('魔搭社区样式提取失败:', error);
+      const errorMessage = error instanceof Error ? error.message : '样式提取失败';
+      console.error('魔搭社区样式提取失败:', errorMessage);
+      
       return {
         success: false,
-        error: error instanceof Error ? error.message : '样式提取失败'
+        error: errorMessage
       };
     }
   }
@@ -199,16 +207,22 @@ export class ModelscopeService {
    */
   private buildExtractPrompt(content: string, styleTypes?: string[]): string {
     const typesText = styleTypes && styleTypes.length > 0 ? styleTypes.join(', ') : '所有可识别的样式类型';
-    return `请分析以下Markdown文本，提取指定类型的样式规则：
+    return `你是一个Markdown样式分析专家，专门从文本中提取格式规则。
 
-文本内容：
-\`\`\`
+重要要求：
+1. 必须严格返回JSON格式
+2. 禁止返回任何解释、说明或其他文字
+3. 禁止使用markdown代码块包装
+4. 禁止添加任何前缀或后缀
+5. 响应必须以{开始，以}结束
+
+分析以下Markdown文本，提取其中的样式规则：
+
 ${content}
-\`\`\`
 
 需要提取的样式类型：${typesText}
 
-请返回JSON格式的结果，包含以下字段：
+返回格式（严格遵循）：
 {
   "rules": [
     {
@@ -226,7 +240,7 @@ ${content}
   "confidence": 0.95
 }
 
-只返回JSON，不要其他文字。`;
+警告：任何非JSON内容都将导致解析失败！只返回纯JSON对象！`;
   }
 
   /**
@@ -269,10 +283,22 @@ ${rulesText}
    */
   private parseExtractResponse(response: string): any {
     try {
+      // 清理响应字符串
+      let cleanResponse = response.trim();
+      
+      // 移除可能的markdown代码块标记
+      cleanResponse = cleanResponse.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+      cleanResponse = cleanResponse.replace(/^```\s*/, '').replace(/\s*```$/, '');
+      
       // 尝试提取JSON部分
-      const jsonMatch = response.match(/\{[\s\S]*\}/);
+      const jsonMatch = cleanResponse.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
-        const parsed = JSON.parse(jsonMatch[0]);
+        let jsonStr = jsonMatch[0];
+        
+        // 修复常见的JSON格式问题
+        jsonStr = this.fixJsonString(jsonStr);
+        
+        const parsed = JSON.parse(jsonStr);
         
         // 确保规则有必要的字段
         if (parsed.rules && Array.isArray(parsed.rules)) {
@@ -287,14 +313,12 @@ ${rulesText}
         return parsed;
       }
       
-      throw new Error('无法解析JSON响应');
+      throw new Error('无法从响应中提取JSON内容');
     } catch (error) {
       console.error('解析提取响应失败:', error);
-      return {
-        rules: [],
-        summary: '解析失败',
-        confidence: 0
-      };
+      console.error('原始响应:', response.substring(0, 1000) + (response.length > 1000 ? '...' : ''));
+      // 重新抛出异常以触发重试机制
+      throw error;
     }
   }
 
@@ -303,10 +327,22 @@ ${rulesText}
    */
   private parseConvertResponse(response: string): any {
     try {
+      // 清理响应字符串
+      let cleanResponse = response.trim();
+      
+      // 移除可能的markdown代码块标记
+      cleanResponse = cleanResponse.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+      cleanResponse = cleanResponse.replace(/^```\s*/, '').replace(/\s*```$/, '');
+      
       // 尝试提取JSON部分
-      const jsonMatch = response.match(/\{[\s\S]*\}/);
+      const jsonMatch = cleanResponse.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
-        return JSON.parse(jsonMatch[0]);
+        let jsonStr = jsonMatch[0];
+        
+        // 修复常见的JSON格式问题
+        jsonStr = this.fixJsonString(jsonStr);
+        
+        return JSON.parse(jsonStr);
       }
       
       throw new Error('无法解析JSON响应');
@@ -319,6 +355,32 @@ ${rulesText}
         confidence: 0
       };
     }
+  }
+
+  /**
+   * 修复JSON字符串中的常见问题
+   */
+  private fixJsonString(jsonStr: string): string {
+    // 修复常见的转义字符问题
+    jsonStr = jsonStr
+      // 修复单独的反斜杠
+      .replace(/\\(?!["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '\\\\')
+      // 修复未转义的双引号（在字符串值中）
+      .replace(/"([^"]*?)(?<!\\)"([^"]*?)(?<!\\)"/g, (match, p1, p2) => {
+        // 如果是键值对的格式，不修改
+        if (p2.trim().startsWith(':')) {
+          return match;
+        }
+        // 转义内部的双引号
+        return `"${p1.replace(/"/g, '\\"')}"${p2.replace(/"/g, '\\"')}"`;
+      })
+      // 修复换行符
+      .replace(/\n/g, '\\n')
+      .replace(/\r/g, '\\r')
+      // 修复制表符
+      .replace(/\t/g, '\\t');
+    
+    return jsonStr;
   }
 }
 

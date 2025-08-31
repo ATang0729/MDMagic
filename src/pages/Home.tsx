@@ -188,9 +188,7 @@ const Home: React.FC = () => {
                 <button
                   onClick={checkServerStatus}
                   className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
-                >
-                  刷新状态
-                </button>
+                >刷新状态</button>
               </div>
             </div>
           </div>
