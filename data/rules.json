@@ -1,0 +1,160 @@
+{
+  "rules": [
+    {
+      "id": "rule_headers_1756619436304",
+      "type": "headers",
+      "name": "标题样式规则",
+      "description": "提取的标题格式规则",
+      "pattern": "# 标题使用单个#号，## 二级标题使用双#号",
+      "examples": [
+        "# 主标题",
+        "## 副标题"
+      ],
+      "createdAt": "2025-08-31T05:50:36.304Z",
+      "updatedAt": "2025-08-31T05:50:36.304Z"
+    },
+    {
+      "id": "rule_emphasis_1756619436304",
+      "type": "emphasis",
+      "name": "强调样式规则",
+      "description": "提取的文本强调规则",
+      "pattern": "**粗体文本** 和 *斜体文本*",
+      "examples": [
+        "**重要内容**",
+        "*强调内容*"
+      ],
+      "createdAt": "2025-08-31T05:50:36.304Z",
+      "updatedAt": "2025-08-31T05:50:36.304Z"
+    },
+    {
+      "id": "rule_headers_1756619643590",
+      "type": "headers",
+      "name": "标题样式规则",
+      "description": "提取的标题格式规则",
+      "pattern": "# 标题使用单个#号，## 二级标题使用双#号",
+      "examples": [
+        "# 主标题",
+        "## 副标题"
+      ],
+      "createdAt": "2025-08-31T05:54:03.590Z",
+      "updatedAt": "2025-08-31T05:54:03.590Z"
+    },
+    {
+      "id": "rule_emphasis_1756619643590",
+      "type": "emphasis",
+      "name": "强调样式规则",
+      "description": "提取的文本强调规则",
+      "pattern": "**粗体文本** 和 *斜体文本*",
+      "examples": [
+        "**重要内容**",
+        "*强调内容*"
+      ],
+      "createdAt": "2025-08-31T05:54:03.590Z",
+      "updatedAt": "2025-08-31T05:54:03.590Z"
+    },
+    {
+      "id": "rule_headers_1756620027022",
+      "type": "headers",
+      "name": "标题样式规则",
+      "description": "提取的标题格式规则",
+      "pattern": "# 标题使用单个#号，## 二级标题使用双#号",
+      "examples": [
+        "# 主标题",
+        "## 副标题"
+      ],
+      "createdAt": "2025-08-31T06:00:27.022Z",
+      "updatedAt": "2025-08-31T06:00:27.022Z"
+    },
+    {
+      "id": "rule_emphasis_1756620027022",
+      "type": "emphasis",
+      "name": "强调样式规则",
+      "description": "提取的文本强调规则",
+      "pattern": "**粗体文本** 和 *斜体文本*",
+      "examples": [
+        "**重要内容**",
+        "*强调内容*"
+      ],
+      "createdAt": "2025-08-31T06:00:27.022Z",
+      "updatedAt": "2025-08-31T06:00:27.022Z"
+    },
+    {
+      "id": "rule_headers_1756620098128",
+      "type": "headers",
+      "name": "标题样式规则",
+      "description": "提取的标题格式规则",
+      "pattern": "# 标题使用单个#号，## 二级标题使用双#号",
+      "examples": [
+        "# 主标题",
+        "## 副标题"
+      ],
+      "createdAt": "2025-08-31T06:01:38.128Z",
+      "updatedAt": "2025-08-31T06:01:38.128Z"
+    },
+    {
+      "id": "rule_emphasis_1756620098128",
+      "type": "emphasis",
+      "name": "强调样式规则",
+      "description": "提取的文本强调规则",
+      "pattern": "**粗体文本** 和 *斜体文本*",
+      "examples": [
+        "**重要内容**",
+        "*强调内容*"
+      ],
+      "createdAt": "2025-08-31T06:01:38.128Z",
+      "updatedAt": "2025-08-31T06:01:38.128Z"
+    },
+    {
+      "id": "rule_lists_1756620098128",
+      "type": "lists",
+      "name": "列表样式规则",
+      "description": "提取的列表格式规则",
+      "pattern": "- 无序列表项\n1. 有序列表项",
+      "examples": [
+        "- 项目一",
+        "1. 第一项"
+      ],
+      "createdAt": "2025-08-31T06:01:38.128Z",
+      "updatedAt": "2025-08-31T06:01:38.128Z"
+    },
+    {
+      "id": "rule_headers_1756620167978",
+      "type": "headers",
+      "name": "标题样式规则",
+      "description": "提取的标题格式规则",
+      "pattern": "# 标题使用单个#号，## 二级标题使用双#号",
+      "examples": [
+        "# 主标题",
+        "## 副标题"
+      ],
+      "createdAt": "2025-08-31T06:02:47.978Z",
+      "updatedAt": "2025-08-31T06:02:47.978Z"
+    },
+    {
+      "id": "rule_emphasis_1756620167978",
+      "type": "emphasis",
+      "name": "强调样式规则",
+      "description": "提取的文本强调规则",
+      "pattern": "**粗体文本** 和 *斜体文本*",
+      "examples": [
+        "**重要内容**",
+        "*强调内容*"
+      ],
+      "createdAt": "2025-08-31T06:02:47.978Z",
+      "updatedAt": "2025-08-31T06:02:47.978Z"
+    },
+    {
+      "id": "rule_lists_1756620167978",
+      "type": "lists",
+      "name": "列表样式规则",
+      "description": "提取的列表格式规则",
+      "pattern": "- 无序列表项\n1. 有序列表项",
+      "examples": [
+        "- 项目一",
+        "1. 第一项"
+      ],
+      "createdAt": "2025-08-31T06:02:47.978Z",
+      "updatedAt": "2025-08-31T06:02:47.978Z"
+    }
+  ]
+}

@@ -1,0 +1,383 @@
+import express from 'express';
+import { AIService, Rule } from '../services/aiService';
+import { StorageService } from '../services/storageService';
+
+const router = express.Router();
+
+// ==================== 样式提取API ====================
+
+/**
+ * POST /api/markdown/extract
+ * 从Markdown文本中提取样式规则
+ */
+router.post('/extract', async (req, res) => {
+  try {
+    const { content, styleTypes } = req.body;
+
+    if (!content || typeof content !== 'string') {
+      return res.status(400).json({
+        success: false,
+        message: '请提供有效的Markdown内容'
+      });
+    }
+
+    // 调用AI服务提取样式
+    const result = await AIService.extractStyles(content, styleTypes);
+
+    if (result.success && result.rules && result.rules.length > 0) {
+      // 保存提取的规则到本地存储
+      await StorageService.addRules(result.rules);
+    }
+
+    res.json(result);
+  } catch (error) {
+    console.error('样式提取API错误:', error);
+    res.status(500).json({
+      success: false,
+      rules: [],
+      message: '服务器内部错误'
+    });
+  }
+});
+
+// ==================== 样式转换API ====================
+
+/**
+ * POST /api/markdown/convert
+ * 根据规则转换文本样式
+ */
+router.post('/convert', async (req, res) => {
+  try {
+    const { content, ruleIds, targetStyle } = req.body;
+
+    if (!content || typeof content !== 'string') {
+      return res.status(400).json({
+        success: false,
+        message: '请提供有效的文本内容'
+      });
+    }
+
+    if (!ruleIds || !Array.isArray(ruleIds) || ruleIds.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: '请选择要应用的规则'
+      });
+    }
+
+    // 获取指定的规则
+    const rules = await StorageService.getRulesByIds(ruleIds);
+    
+    if (rules.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: '未找到指定的规则'
+      });
+    }
+
+    // 调用AI服务转换样式
+    const result = await AIService.convertStyles(content, rules, targetStyle);
+
+    if (result.success) {
+      // 保存转换历史
+      await StorageService.addHistoryRecord({
+        originalContent: content,
+        convertedContent: result.convertedContent,
+        appliedRuleIds: ruleIds
+      });
+    }
+
+    res.json(result);
+  } catch (error) {
+    console.error('样式转换API错误:', error);
+    res.status(500).json({
+      success: false,
+      convertedContent: req.body.content || '',
+      appliedRules: [],
+      message: '服务器内部错误'
+    });
+  }
+});
+
+// ==================== 规则管理API ====================
+
+/**
+ * GET /api/markdown/rules
+ * 获取所有规则
+ */
+router.get('/rules', async (req, res) => {
+  try {
+    const rules = await StorageService.getRules();
+    res.json({
+      success: true,
+      rules,
+      message: '获取规则成功'
+    });
+  } catch (error) {
+    console.error('获取规则API错误:', error);
+    res.status(500).json({
+      success: false,
+      rules: [],
+      message: '服务器内部错误'
+    });
+  }
+});
+
+/**
+ * POST /api/markdown/rules
+ * 添加新规则
+ */
+router.post('/rules', async (req, res) => {
+  try {
+    const { type, pattern, description, examples } = req.body;
+
+    if (!type || !pattern || !description) {
+      return res.status(400).json({
+        success: false,
+        message: '请提供完整的规则信息（type, pattern, description）'
+      });
+    }
+
+    const newRule: Rule = {
+      id: `rule_${Date.now()}`,
+      type,
+      pattern,
+      description,
+      examples: examples || [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    await StorageService.addRules([newRule]);
+
+    res.json({
+      success: true,
+      rule: newRule,
+      message: '规则添加成功'
+    });
+  } catch (error) {
+    console.error('添加规则API错误:', error);
+    res.status(500).json({
+      success: false,
+      message: '服务器内部错误'
+    });
+  }
+});
+
+/**
+ * PUT /api/markdown/rules/:id
+ * 更新规则
+ */
+router.put('/rules/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { type, pattern, description, examples } = req.body;
+
+    const updatedRule = await StorageService.updateRule(id, {
+      type,
+      pattern,
+      description,
+      examples
+    });
+
+    if (!updatedRule) {
+      return res.status(404).json({
+        success: false,
+        message: '规则不存在'
+      });
+    }
+
+    res.json({
+      success: true,
+      rule: updatedRule,
+      message: '规则更新成功'
+    });
+  } catch (error) {
+    console.error('更新规则API错误:', error);
+    res.status(500).json({
+      success: false,
+      message: '服务器内部错误'
+    });
+  }
+});
+
+/**
+ * DELETE /api/markdown/rules/:id
+ * 删除规则
+ */
+router.delete('/rules/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = await StorageService.deleteRule(id);
+
+    if (!deleted) {
+      return res.status(404).json({
+        success: false,
+        message: '规则不存在'
+      });
+    }
+
+    res.json({
+      success: true,
+      message: '规则删除成功'
+    });
+  } catch (error) {
+    console.error('删除规则API错误:', error);
+    res.status(500).json({
+      success: false,
+      message: '服务器内部错误'
+    });
+  }
+});
+
+// ==================== 规则集管理API ====================
+
+/**
+ * GET /api/markdown/rule-sets
+ * 获取所有规则集
+ */
+router.get('/rule-sets', async (req, res) => {
+  try {
+    const ruleSets = await StorageService.getRuleSets();
+    res.json({
+      success: true,
+      ruleSets,
+      message: '获取规则集成功'
+    });
+  } catch (error) {
+    console.error('获取规则集API错误:', error);
+    res.status(500).json({
+      success: false,
+      ruleSets: [],
+      message: '服务器内部错误'
+    });
+  }
+});
+
+/**
+ * POST /api/markdown/rule-sets
+ * 创建规则集
+ */
+router.post('/rule-sets', async (req, res) => {
+  try {
+    const { name, description, ruleIds } = req.body;
+
+    if (!name || !ruleIds || !Array.isArray(ruleIds)) {
+      return res.status(400).json({
+        success: false,
+        message: '请提供规则集名称和规则ID数组'
+      });
+    }
+
+    const ruleSet = await StorageService.addRuleSet({
+      name,
+      description: description || '',
+      ruleIds
+    });
+
+    res.json({
+      success: true,
+      ruleSet,
+      message: '规则集创建成功'
+    });
+  } catch (error) {
+    console.error('创建规则集API错误:', error);
+    res.status(500).json({
+      success: false,
+      message: '服务器内部错误'
+    });
+  }
+});
+
+// ==================== 转换历史API ====================
+
+/**
+ * GET /api/markdown/history
+ * 获取转换历史
+ */
+router.get('/history', async (req, res) => {
+  try {
+    const history = await StorageService.getHistory();
+    res.json({
+      success: true,
+      history,
+      message: '获取历史记录成功'
+    });
+  } catch (error) {
+    console.error('获取历史API错误:', error);
+    res.status(500).json({
+      success: false,
+      history: [],
+      message: '服务器内部错误'
+    });
+  }
+});
+
+/**
+ * DELETE /api/markdown/history/:id
+ * 删除历史记录
+ */
+router.delete('/history/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = await StorageService.deleteHistoryRecord(id);
+
+    if (!deleted) {
+      return res.status(404).json({
+        success: false,
+        message: '历史记录不存在'
+      });
+    }
+
+    res.json({
+      success: true,
+      message: '历史记录删除成功'
+    });
+  } catch (error) {
+    console.error('删除历史API错误:', error);
+    res.status(500).json({
+      success: false,
+      message: '服务器内部错误'
+    });
+  }
+});
+
+/**
+ * DELETE /api/markdown/history
+ * 清空所有历史记录
+ */
+router.delete('/history', async (req, res) => {
+  try {
+    await StorageService.clearHistory();
+    res.json({
+      success: true,
+      message: '历史记录清空成功'
+    });
+  } catch (error) {
+    console.error('清空历史API错误:', error);
+    res.status(500).json({
+      success: false,
+      message: '服务器内部错误'
+    });
+  }
+});
+
+// ==================== 测试API ====================
+
+/**
+ * GET /api/markdown/test
+ * 测试AI服务连接
+ */
+router.get('/test', async (req, res) => {
+  try {
+    const result = await AIService.testConnection();
+    res.json(result);
+  } catch (error) {
+    console.error('测试API错误:', error);
+    res.status(500).json({
+      success: false,
+      message: '服务器内部错误'
+    });
+  }
+});
+
+export default router;

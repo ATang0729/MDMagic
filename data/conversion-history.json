@@ -1,0 +1,23 @@
+{
+  "history": [
+    {
+      "id": "conv_1756620213177",
+      "originalContent": "# 原始标题\n\n这是一个**粗体**文本示例。\n\n## 二级标题\n\n- 项目1\n- 项目2",
+      "convertedContent": "## 原始标题\n\n这是一个__粗体__文本示例。\n\n### 二级标题\n\n- 项目1\n- 项目2",
+      "appliedRuleIds": [
+        "rule_headers_1756620167978",
+        "rule_emphasis_1756620167978"
+      ],
+      "createdAt": "2025-08-31T06:03:33.177Z"
+    },
+    {
+      "id": "conv_1756619485961",
+      "originalContent": "# 原始标题\n\n这是一个**粗体**文本。",
+      "convertedContent": "## 原始标题\n\n这是一个__粗体__文本。",
+      "appliedRuleIds": [
+        "rule_headers_1756619436304"
+      ],
+      "createdAt": "2025-08-31T05:51:25.961Z"
+    }
+  ]
+}
