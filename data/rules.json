@@ -901,6 +901,256 @@
       ],
       "createdAt": "2025-08-31T07:02:44.346Z",
       "updatedAt": "2025-08-31T07:02:44.346Z"
+    },
+    {
+      "id": "rule_heading_1700000000",
+      "type": "标题",
+      "name": "一级标题",
+      "description": "使用单个#符号开头的行，表示一级标题。",
+      "pattern": "^#{1}\\s+.*$",
+      "examples": [
+        "# 项目概述",
+        "# 安装指南"
+      ],
+      "createdAt": "2023-11-15T08:00:00Z",
+      "updatedAt": "2023-11-15T08:00:00Z"
+    },
+    {
+      "id": "rule_heading_1700000001",
+      "type": "标题",
+      "name": "二级标题",
+      "description": "使用两个#符号开头的行，表示二级标题。",
+      "pattern": "^#{2}\\s+.*$",
+      "examples": [
+        "## 功能说明",
+        "## 配置参数"
+      ],
+      "createdAt": "2023-11-15T08:00:00Z",
+      "updatedAt": "2023-11-15T08:00:00Z"
+    },
+    {
+      "id": "rule_bold_1700000002",
+      "type": "加粗",
+      "name": "双星号加粗",
+      "description": "使用双星号包围文本，表示加粗。",
+      "pattern": "\\*\\*(.*?)\\*\\*",
+      "examples": [
+        "**重要提示**",
+        "请确认**配置正确**"
+      ],
+      "createdAt": "2023-11-15T08:00:00Z",
+      "updatedAt": "2023-11-15T08:00:00Z"
+    },
+    {
+      "id": "rule_italic_1700000003",
+      "type": "斜体",
+      "name": "单星号斜体",
+      "description": "使用单星号包围文本，表示斜体。",
+      "pattern": "\\*(.*?)\\*",
+      "examples": [
+        "*注意*",
+        "请检查*输入格式*"
+      ],
+      "createdAt": "2023-11-15T08:00:00Z",
+      "updatedAt": "2023-11-15T08:00:00Z"
+    },
+    {
+      "id": "rule_link_1700000004",
+      "type": "链接",
+      "name": "普通链接",
+      "description": "使用[文本](URL)格式定义超链接。",
+      "pattern": "\\[.*?\\]\\(.*?\\)",
+      "examples": [
+        "[访问官网](https://www.example.com)",
+        "[查看文档](/docs)"
+      ],
+      "createdAt": "2023-11-15T08:00:00Z",
+      "updatedAt": "2023-11-15T08:00:00Z"
+    },
+    {
+      "id": "rule_list_1700000005",
+      "type": "列表",
+      "name": "无序列表",
+      "description": "以-或*开头的行，表示无序列表项。",
+      "pattern": "^[-*]\\s+.*$",
+      "examples": [
+        "- 选项一",
+        "* 选项二"
+      ],
+      "createdAt": "2023-11-15T08:00:00Z",
+      "updatedAt": "2023-11-15T08:00:00Z"
+    },
+    {
+      "id": "rule_code_1700000006",
+      "type": "代码",
+      "name": "行内代码",
+      "description": "使用反引号包裹文本，表示行内代码。",
+      "pattern": "`(.*?)`",
+      "examples": [
+        "`console.log('Hello')`",
+        "使用 `git commit` 提交"
+      ],
+      "createdAt": "2023-11-15T08:00:00Z",
+      "updatedAt": "2023-11-15T08:00:00Z"
+    },
+    {
+      "id": "rule_blockquote_1700000007",
+      "type": "引用",
+      "name": "块引用",
+      "description": "以>开头的行，表示块引用。",
+      "pattern": "^>\\s+.*$",
+      "examples": [
+        "> 这是一个引用段落。",
+        "> 强调重点内容。"
+      ],
+      "createdAt": "2023-11-15T08:00:00Z",
+      "updatedAt": "2023-11-15T08:00:00Z"
+    },
+    {
+      "id": "rule_heading_1",
+      "type": "heading",
+      "name": "三级标题",
+      "description": "用于表示章节的三级标题，使用三个#号开头，后跟空格和标题文本。",
+      "pattern": "### {title}",
+      "examples": [
+        "### 3.3.3 CLIP知识蒸馏（CLIP Knowledge Distillation）"
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "rule_list_item_2",
+      "type": "list",
+      "name": "有序列表项",
+      "description": "用于表示有序步骤或要点，以数字加英文句点开头，后跟空格和内容。",
+      "pattern": "{number}. {content}",
+      "examples": [
+        "1. **监督信号来源**：用真实新视角图像、BEV对应区域图像的CLIP特征作为“真值特征” $ V_j^{gt} $；",
+        "2. **蒸馏损失函数**：对g3D-LF预测的新视角表示 $ V' $、全景表示 $ V_i'' $、BEV表示 $ \\hat{R}' $ 计算对比损失，强制其与CLIP特征对齐（以新视角蒸馏为例）："
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "rule_bold_text_3",
+      "type": "bold",
+      "name": "加粗文本",
+      "description": "用于强调关键术语或概念，使用双星号包围文本。",
+      "pattern": "**{text}**",
+      "examples": [
+        "**监督信号来源**",
+        "**蒸馏损失函数**"
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "rule_math_inline_4",
+      "type": "math",
+      "name": "行内数学公式",
+      "description": "用于表示数学表达式，使用美元符号包裹，支持LaTeX语法。",
+      "pattern": "$ {formula} $",
+      "examples": [
+        "$ V_j^{gt} $",
+        "$ V' $",
+        "$ V_i'' $",
+        "$ \\hat{R}' $",
+        "$ \\mathcal{L}_{view\\_clip } $",
+        "$ \\text{CrossEntropy}\\left(\\left\\{\\text{CosSim}\\left(V_i', V_j^{gt}\\right) / \\tau\\right\\}_{j=1}^{J}, i\\right) $"
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "rule_math_block_5",
+      "type": "math",
+      "name": "块级数学公式",
+      "description": "用于展示独立的数学公式，使用双美元符号包裹，支持多行和复杂结构。",
+      "pattern": "$$ {formula} $$",
+      "examples": [
+        "$$\n\\mathcal{L}_{view\\_clip }=\\frac{1}{I} \\sum_{i=1}^{I} \\text{CrossEntropy}\\left(\\left\\{\\text{CosSim}\\left(V_i', V_j^{gt}\\right) / \\tau\\right\\}_{j=1}^{J}, i\\right)\n$$"
+      ],
+      "createdAt": "2023-10-01T00:00:00Z",
+      "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "rule_heading_1698765432000",
+      "type": "heading",
+      "name": "三级标题",
+      "description": "用于表示三级章节标题，使用三个#号开头，后跟空格和标题文本。",
+      "pattern": "### {title}",
+      "examples": [
+        "### 3.3.3 CLIP知识蒸馏（CLIP Knowledge Distillation）"
+      ],
+      "createdAt": "2023-10-27T12:00:00Z",
+      "updatedAt": "2023-10-27T12:00:00Z"
+    },
+    {
+      "id": "rule_list_item_1698765432001",
+      "type": "list",
+      "name": "有序列表项",
+      "description": "用于表示有序列表，以数字加英文句点开头，后跟空格和内容。",
+      "pattern": "{number}. {content}",
+      "examples": [
+        "1. **监督信号来源**：用真实新视角图像、BEV对应区域图像的CLIP特征作为“真值特征” $ V_j^{gt} $；",
+        "2. **蒸馏损失函数**：对g3D-LF预测的新视角表示 $ V' $、全景表示 $ V_i'' $、BEV表示 $ \\hat{R}' $ 计算对比损失，强制其与CLIP特征对齐（以新视角蒸馏为例）："
+      ],
+      "createdAt": "2023-10-27T12:00:00Z",
+      "updatedAt": "2023-10-27T12:00:00Z"
+    },
+    {
+      "id": "rule_bold_text_1698765432002",
+      "type": "bold",
+      "name": "加粗文本",
+      "description": "用于强调关键术语或概念，使用双星号包围文本。",
+      "pattern": "**{text}**",
+      "examples": [
+        "**监督信号来源**",
+        "**蒸馏损失函数**"
+      ],
+      "createdAt": "2023-10-27T12:00:00Z",
+      "updatedAt": "2023-10-27T12:00:00Z"
+    },
+    {
+      "id": "rule_math_inline_1698765432003",
+      "type": "math",
+      "name": "行内数学公式",
+      "description": "用于表示数学表达式，使用美元符号包裹，支持LaTeX语法。",
+      "pattern": "$ {formula} $",
+      "examples": [
+        "$ V_j^{gt} $",
+        "$ V' $",
+        "$ V_i'' $",
+        "$ \\hat{R}' $",
+        "$ \\mathcal{L}_{view\\_clip } $",
+        "$ \\text{CrossEntropy}\\left(\\left\\{\\text{CosSim}\\left(V_i', V_j^{gt}\\right) / \\tau\\right\\}_{j=1}^{J}, i\\right) $"
+      ],
+      "createdAt": "2023-10-27T12:00:00Z",
+      "updatedAt": "2023-10-27T12:00:00Z"
+    },
+    {
+      "id": "rule_math_block_1698765432004",
+      "type": "math",
+      "name": "块级数学公式",
+      "description": "用于表示独立的数学公式块，使用双美元符号包裹，支持多行显示。",
+      "pattern": "$$ {formula} $$",
+      "examples": [
+        "$$\n\\mathcal{L}_{view\\_clip }=\\frac{1}{I} \\sum_{i=1}^{I} \\text{CrossEntropy}\\left(\\left\\{\\text{CosSim}\\left(V_i', V_j^{gt}\\right) / \\tau\\right\\}_{j=1}^{J}, i\\right)\n$$"
+      ],
+      "createdAt": "2023-10-27T12:00:00Z",
+      "updatedAt": "2023-10-27T12:00:00Z"
+    },
+    {
+      "id": "rule_heading_1700000000",
+      "type": "heading",
+      "name": "三级标题",
+      "description": "用于表示三级标题，使用三个井号加空格后跟标题文本",
+      "pattern": "### {title}",
+      "examples": [
+        "### 3.3.3 CLIP知识蒸馏（CLIP Knowledge Distillation）"
+      ],
+      "createdAt": "2023-11-15T08:00:00Z",
+      "updatedAt": "2023-11-15T08:00:00Z"
     }
   ]
 }

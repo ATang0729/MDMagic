@@ -28,7 +28,7 @@ export interface ModelscopeResponse {
  */
 export class ModelscopeService {
   private client: OpenAI;
-  private model = 'Qwen/Qwen2.5-Coder-32B-Instruct';
+  private model = process.env.MODELSCOPE_MODEL || "Qwen/Qwen3-30B-A3B-Instruct-2507";
 
   constructor() {
     const token = process.env.MODELSCOPE_ACCESS_TOKEN;
@@ -240,7 +240,7 @@ ${content}
   "confidence": 0.95
 }
 
-警告：任何非JSON内容都将导致解析失败！只返回纯JSON对象！`;
+警告：任何非JSON内容都将导致解析失败！只返回纯JSON对象！如果用户输入的 Markdown 文本如果本身不包含任何样式规则，则返回一个空的 JSON 对象。`;
   }
 
   /**
@@ -283,20 +283,80 @@ ${rulesText}
    */
   private parseExtractResponse(response: string): any {
     try {
+      console.log('开始解析响应，原始长度:', response.length);
+      
       // 清理响应字符串
       let cleanResponse = response.trim();
+      console.log('清理后长度:', cleanResponse.length);
       
       // 移除可能的markdown代码块标记
       cleanResponse = cleanResponse.replace(/^```json\s*/, '').replace(/\s*```$/, '');
       cleanResponse = cleanResponse.replace(/^```\s*/, '').replace(/\s*```$/, '');
+      console.log('移除代码块标记后长度:', cleanResponse.length);
       
-      // 尝试提取JSON部分
-      const jsonMatch = cleanResponse.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        let jsonStr = jsonMatch[0];
+      // 查找最后一个完整的JSON对象
+      let jsonStr = '';
+      let braceCount = 0;
+      let inString = false;
+      let escapeNext = false;
+      let jsonStart = -1;
+      
+      for (let i = 0; i < cleanResponse.length; i++) {
+        const char = cleanResponse[i];
+        
+        if (escapeNext) {
+          escapeNext = false;
+          continue;
+        }
+        
+        if (char === '\\') {
+          escapeNext = true;
+          continue;
+        }
+        
+        if (char === '"' && !escapeNext) {
+          inString = !inString;
+        }
+        
+        if (!inString) {
+          if (char === '{') {
+            if (braceCount === 0) {
+              jsonStart = i;
+            }
+            braceCount++;
+          } else if (char === '}') {
+            braceCount--;
+            if (braceCount === 0 && jsonStart !== -1) {
+              jsonStr = cleanResponse.substring(jsonStart, i + 1);
+              break;
+            }
+          }
+        }
+      }
+      
+      if (!jsonStr) {
+        // 如果没有找到完整的JSON，尝试原来的方法
+        const jsonMatch = cleanResponse.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          jsonStr = jsonMatch[0];
+        }
+      }
+      
+      if (jsonStr) {
+        console.log('提取的JSON字符串前100字符:', jsonStr.substring(0, 100));
+        console.log('JSON字符串长度:', jsonStr.length);
+        
+        // 检查JSON字符串的开头字符
+        const firstChar = jsonStr.charCodeAt(0);
+        console.log('JSON首字符:', jsonStr[0], '字符码:', firstChar);
         
         // 修复常见的JSON格式问题
+        const originalJsonStr = jsonStr;
         jsonStr = this.fixJsonString(jsonStr);
+        
+        if (originalJsonStr !== jsonStr) {
+          console.log('JSON字符串已修复，修复后前100字符:', jsonStr.substring(0, 100));
+        }
         
         const parsed = JSON.parse(jsonStr);
         
@@ -310,13 +370,15 @@ ${rulesText}
           }));
         }
         
+        console.log('JSON解析成功，规则数量:', parsed.rules?.length || 0);
         return parsed;
       }
       
       throw new Error('无法从响应中提取JSON内容');
     } catch (error) {
       console.error('解析提取响应失败:', error);
-      console.error('原始响应:', response.substring(0, 1000) + (response.length > 1000 ? '...' : ''));
+      console.error('原始响应前500字符:', response.substring(0, 500));
+      console.error('原始响应后500字符:', response.substring(Math.max(0, response.length - 500)));
       // 重新抛出异常以触发重试机制
       throw error;
     }
@@ -361,26 +423,50 @@ ${rulesText}
    * 修复JSON字符串中的常见问题
    */
   private fixJsonString(jsonStr: string): string {
-    // 修复常见的转义字符问题
-    jsonStr = jsonStr
-      // 修复单独的反斜杠
-      .replace(/\\(?!["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '\\\\')
-      // 修复未转义的双引号（在字符串值中）
-      .replace(/"([^"]*?)(?<!\\)"([^"]*?)(?<!\\)"/g, (match, p1, p2) => {
-        // 如果是键值对的格式，不修改
-        if (p2.trim().startsWith(':')) {
-          return match;
+    try {
+      // 首先尝试直接解析，如果成功则返回原字符串
+      JSON.parse(jsonStr);
+      return jsonStr;
+    } catch (error) {
+      console.log('JSON解析失败，开始修复:', error.message);
+      
+      // 如果解析失败，进行深度清理
+      let cleaned = jsonStr
+        // 移除可能的BOM字符和其他不可见字符
+        .replace(/^\uFEFF/, '')
+        .replace(/^\u200B/, '') // 零宽空格
+        .replace(/^\u00A0/, '') // 不间断空格
+        // 移除开头和结尾的非JSON字符
+        .replace(/^[^{]*/, '')
+        .replace(/[^}]*$/, '')
+        // 移除控制字符（除了\n, \r, \t）
+        .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+        // 修复字符串值中的换行符和特殊字符
+        .replace(/"([^"]*?)\n([^"]*?)"/g, '"$1\\n$2"')
+        .replace(/"([^"]*?)\r([^"]*?)"/g, '"$1\\r$2"')
+        .replace(/"([^"]*?)\t([^"]*?)"/g, '"$1\\t$2"')
+        // 修复可能的尾随逗号
+        .replace(/,\s*}/g, '}')
+        .replace(/,\s*]/g, ']');
+      
+      // 确保字符串以{开头，以}结尾
+      if (!cleaned.startsWith('{')) {
+        const firstBrace = cleaned.indexOf('{');
+        if (firstBrace !== -1) {
+          cleaned = cleaned.substring(firstBrace);
         }
-        // 转义内部的双引号
-        return `"${p1.replace(/"/g, '\\"')}"${p2.replace(/"/g, '\\"')}"`;
-      })
-      // 修复换行符
-      .replace(/\n/g, '\\n')
-      .replace(/\r/g, '\\r')
-      // 修复制表符
-      .replace(/\t/g, '\\t');
-    
-    return jsonStr;
+      }
+      
+      if (!cleaned.endsWith('}')) {
+        const lastBrace = cleaned.lastIndexOf('}');
+        if (lastBrace !== -1) {
+          cleaned = cleaned.substring(0, lastBrace + 1);
+        }
+      }
+      
+      console.log('修复后的JSON前100字符:', cleaned.substring(0, 100));
+      return cleaned;
+    }
   }
 }
 

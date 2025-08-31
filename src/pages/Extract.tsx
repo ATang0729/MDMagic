@@ -65,7 +65,7 @@ const Extract: React.FC = () => {
       
       if (currentRetry < maxRetries) {
         // 自动重试，延迟递增
-        const delay = 1000 * (currentRetry + 1); // 1秒、2秒、3秒
+        const delay = 100 * (currentRetry + 1); // 0.1秒、0.2秒、0.3秒
         console.log(`将在${delay}ms后进行第${currentRetry + 1}次重试`);
         
         setTimeout(() => {
