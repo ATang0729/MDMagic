@@ -124,6 +124,7 @@ export class ModelscopeService {
       });
 
       const result = response.choices[0]?.message?.content;
+      
       if (!result) {
         throw new Error('API返回空结果');
       }

@@ -31,10 +31,12 @@ app.use('/api/auth', authRoutes);
 /**
  * health
  */
-app.use('/api/health', (req: Request, res: Response, next: NextFunction): void => {
+app.get('/api/health', (req: Request, res: Response): void => {
   res.status(200).json({
-    success: true,
-    message: 'ok'
+    status: 'healthy',
+    message: 'Markdown自动排版智能体服务运行正常',
+    timestamp: new Date().toISOString(),
+    version: '1.0.0'
   });
 });
 

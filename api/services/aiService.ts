@@ -154,8 +154,8 @@ export class AIService {
         if (result.success) {
           return {
             success: true,
-            rules: result.data?.rules || [],
-            message: result.data?.message || '提取成功'
+            rules: result.rules || [],
+            message: result.message || '提取成功'
           };
         }
       } catch (error) {

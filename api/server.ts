@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 3001;
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
     ? ['https://your-domain.com'] 
-    : ['http://localhost:5173', 'http://localhost:3000'],
+    : ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:5175'],
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' })); // 增加请求体大小限制，支持大文本处理
@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 // Routes
 app.get('/api/health', (req, res) => {
   res.json({ 
-    status: 'OK', 
+    status: 'healthy', 
     message: 'Markdown自动排版智能体服务运行正常',
     timestamp: new Date().toISOString(),
     version: '1.0.0'

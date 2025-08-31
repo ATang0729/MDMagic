@@ -155,6 +155,103 @@
       ],
       "createdAt": "2025-08-31T06:02:47.978Z",
       "updatedAt": "2025-08-31T06:02:47.978Z"
+    },
+    {
+      "id": "rule_heading_1672531200",
+      "type": "heading",
+      "name": "一级标题",
+      "description": "用于表示文档的一级标题",
+      "pattern": "# 文本",
+      "examples": [
+        "# 测试标题"
+      ],
+      "createdAt": "2023-01-01T00:00:00Z",
+      "updatedAt": "2023-01-01T00:00:00Z"
+    },
+    {
+      "id": "rule_bold_1672531200",
+      "type": "bold",
+      "name": "粗体文本",
+      "description": "用于表示粗体文本",
+      "pattern": "**文本** 或 __文本__",
+      "examples": [
+        "**粗体文本**"
+      ],
+      "createdAt": "2023-01-01T00:00:00Z",
+      "updatedAt": "2023-01-01T00:00:00Z"
+    },
+    {
+      "id": "rule_italic_1672531200",
+      "type": "italic",
+      "name": "斜体文本",
+      "description": "用于表示斜体文本",
+      "pattern": "*文本* 或 _文本_",
+      "examples": [
+        "*斜体文本*"
+      ],
+      "createdAt": "2023-01-01T00:00:00Z",
+      "updatedAt": "2023-01-01T00:00:00Z"
+    },
+    {
+      "id": "rule_heading_1672531200",
+      "type": "heading",
+      "name": "一级标题",
+      "description": "用于表示最高级别的标题。",
+      "pattern": "# 文本",
+      "examples": [
+        "# 新测试"
+      ],
+      "createdAt": "2023-01-01T00:00:00Z",
+      "updatedAt": "2023-01-01T00:00:00Z"
+    },
+    {
+      "id": "rule_bold_1672531200",
+      "type": "bold",
+      "name": "粗体",
+      "description": "用于强调文本。",
+      "pattern": "**文本** 或 __文本__",
+      "examples": [
+        "**新粗体**",
+        "__新粗体__"
+      ],
+      "createdAt": "2023-01-01T00:00:00Z",
+      "updatedAt": "2023-01-01T00:00:00Z"
+    },
+    {
+      "id": "rule_heading_1683000000",
+      "type": "heading",
+      "name": "一级标题",
+      "description": "用于表示最高级别的标题",
+      "pattern": "# 文本",
+      "examples": [
+        "# 最终测试"
+      ],
+      "createdAt": "2023-05-01T00:00:00Z",
+      "updatedAt": "2023-05-01T00:00:00Z"
+    },
+    {
+      "id": "rule_bold_1683000001",
+      "type": "bold",
+      "name": "粗体文本",
+      "description": "用于强调文本的重要性",
+      "pattern": "**文本**",
+      "examples": [
+        "**确认修复**"
+      ],
+      "createdAt": "2023-05-01T00:00:01Z",
+      "updatedAt": "2023-05-01T00:00:01Z"
+    },
+    {
+      "id": "rule_unordered_list_1683000002",
+      "type": "unordered list",
+      "name": "无序列表项",
+      "description": "用于创建项目列表",
+      "pattern": "- 文本",
+      "examples": [
+        "- 列表项"
+      ],
+      "createdAt": "2023-05-01T00:00:02Z",
+      "updatedAt": "2023-05-01T00:00:02Z"
     }
   ]
 }
