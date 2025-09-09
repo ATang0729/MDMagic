@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://your-domain.com'] 
+    ? ['https://trae4lkexq53-atang0729-harrys-projects-7ac7827c.vercel.app'] 
     : ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:5175'],
   credentials: true
 }));
@@ -62,7 +62,7 @@ const server = app.listen(PORT, () => {
   console.log(`🚀 Markdown自动排版智能体服务已启动`);
   console.log(`📡 服务地址: http://localhost:${PORT}`);
   console.log(`🌍 环境: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🤖 AI模型: ${process.env.MODELSCOPE_MODEL || 'Qwen/Qwen2.5-Coder-32B-Instruct'}`);
+  console.log(`🤖 AI模型: ${process.env.MODELSCOPE_MODEL}`);
 });
 
 /**

@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "@/pages/Home";
-import Extract from "@/pages/Extract";
-import Convert from "@/pages/Convert";
-import Rules from "@/pages/Rules";
-import History from "@/pages/History";
+import Home from "./pages/Home";
+import Extract from "./pages/Extract";
+import Convert from "./pages/Convert";
+import Rules from "./pages/Rules";
+import History from "./pages/History";
 
 export default function App() {
   return (

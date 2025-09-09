@@ -21,6 +21,11 @@ export interface ModelscopeResponse {
   success: boolean;
   data?: any;
   error?: string;
+  rules?: Rule[];
+  convertedContent?: string;
+  appliedRules?: any[];
+  summary?: string;
+  confidence?: number;
 }
 
 /**
