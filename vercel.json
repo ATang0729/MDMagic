@@ -3,6 +3,13 @@
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "framework": null,
+  "env": {
+    "VITE_API_URL": "/api",
+    "MODELSCOPE_ACCESS_TOKEN": "ms-98b54bd2-2976-49e2-af94-36912201adfa",
+    "MODELSCOPE_BASE_URL": "https://api-inference.modelscope.cn/v1/",
+    "MODELSCOPE_MODEL": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+    "NODE_ENV": "production"
+  },
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/index" },
     { "source": "/(.*)", "destination": "/index.html" }

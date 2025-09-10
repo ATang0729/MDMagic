@@ -15,8 +15,8 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://trae4lkexq53-atang0729-harrys-projects-7ac7827c.vercel.app'] 
-    : ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:5175'],
+    ? ['https://trae-mdmagic.vercel.app',] 
+    : ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:5175', 'http://localhost:3002'],
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' })); // 增加请求体大小限制，支持大文本处理
