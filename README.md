@@ -76,8 +76,24 @@ MDMagic/
    
    在项目根目录创建 `.env` 文件：
    ```env
+   # API配置
+   VITE_API_URL=/api
+   
+   # ModelScope AI服务配置
    MODELSCOPE_ACCESS_TOKEN=your_modelscope_token_here
+   MODELSCOPE_BASE_URL=https://api-inference.modelscope.cn/v1/
+   MODELSCOPE_MODEL=Qwen/Qwen3-30B-A3B-Instruct-2507
+   
+   # 环境配置
+   NODE_ENV=production
    ```
+   
+   **环境变量说明：**
+   - `VITE_API_URL`: API服务地址，开发环境使用 `/api`
+   - `MODELSCOPE_ACCESS_TOKEN`: ModelScope平台的访问令牌，用于AI服务调用
+   - `MODELSCOPE_BASE_URL`: ModelScope API的基础URL
+   - `MODELSCOPE_MODEL`: 使用的AI模型名称
+   - `NODE_ENV`: 运行环境，生产环境设置为 `production`
    
    > 💡 **获取魔搭社区访问令牌**：访问 [魔搭社区](https://modelscope.cn/) 注册账号并获取API访问令牌
 
@@ -147,6 +163,42 @@ MDMagic/
   "message": "操作成功"
 }
 ```
+
+## 📦 部署说明
+
+### Vercel部署
+
+项目已配置Vercel部署，配置文件为 `vercel.json`：
+
+```json
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
+  "framework": null,
+  "env": {
+    "VITE_API_URL": "/api",
+    "MODELSCOPE_ACCESS_TOKEN": "your_token_here",
+    "MODELSCOPE_BASE_URL": "https://api-inference.modelscope.cn/v1/",
+    "MODELSCOPE_MODEL": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+    "NODE_ENV": "production"
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
+```
+
+**部署步骤：**
+1. 确保所有环境变量已正确配置
+2. 运行 `npm run build` 构建项目
+3. 部署到Vercel或其他支持Node.js的平台
+
+**注意事项：**
+- 生产环境需要配置正确的ModelScope访问令牌
+- API路由通过rewrites配置实现前后端统一部署
+- 确保所有依赖项已正确安装
 
 ## 🛠️ 开发说明
 
